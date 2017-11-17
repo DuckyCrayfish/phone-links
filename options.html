@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Tel Linker Options</title>
+    <style type="text/css">
+        body {
+            padding: 10px;
+        }
+        table {
+            width: 350px;
+        }
+        ul {
+            width: 350px;
+            overflow: hidden;
+            padding: 0;
+            margin: 0;
+            list-style-type: none;
+        }
+        ul li {
+            padding: 6px;
+            border-radius: 3px;
+            min-height: 20px;
+            background-color: #f5f5f5;
+            border: 1px solid #e3e3e3;
+            box-shadow: inset 0 1px 1px rgba(0,0,0,0.05);
+            font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+            font-size: 14px;
+            line-height: 1.428571429;
+            word-wrap: break-word;
+            white-space: nowrap;
+            left: -15px;
+            margin-bottom: 5px;
+            cursor: pointer;
+        }
+        .hide-button {
+            visibility: hidden;
+            float: left;
+            position: relative;
+            margin: 0;
+            color: #000;
+            padding: 0;
+            cursor: pointer;
+            background-color: transparent;
+            border: none;
+            outline: none;
+            overflow: hidden;
+            left: -2px;
+            bottom: -5px;
+            font-weight: bold;
+            line-height: 1;
+            text-shadow: 0 1px 0 #fff;
+            opacity: .5;
+            text-transform: none;
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            font-size: 75%;
+            margin-right: 5px;
+        }
+        ul li:hover .hide-button {
+            visibility: visible;
+        }
+    </style>
+    <script type="text/javascript" src="options.js"></script>
+</head>
+
+<body>
+    <table align="center" cellspacing="10">
+        <tr>
+            <td colspan="2" align="center" style="color:#063515;font-weight:bold;">
+                <span id="status">&nbsp;</span>
+            </td>
+        </tr>
+        <tr>
+            <td align="right">
+                Tel Link Format:
+            </td>
+            <td>
+                <input type="text" id="telLinkFormat" style="border:1px solid #000;font-family:'Courier New'" />
+            </td>
+        </tr>
+        <tr>
+            <td align="right">
+                Link Text Format:
+            </td>
+            <td>
+                <input type="text" id="linkTextFormat" style="border:1px solid #000;font-family:'Courier New'" />
+            </td>
+        </tr>
+        <tr>
+            <td></td>
+            <td valign="middle" align="left">
+                <label><input type="checkbox" id="overrideLinks" /> Override existing links</label>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <span style="font-style:italic;font-weight:100;font-size:x-small;">{0} for original number, {1} for area code, {2} for three digit part, {3} for four digit part</span>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2" align="center">
+                <button id="saveButton">Save</button>
+            </td>
+        </tr>
+        <tr id="filteredDomainsTR">
+            <td colspan="2">
+                Filtered domains: <span style="position:relative;float:right;font-size:xx-small;font-style:italic;">click to delete</span><br />
+                <ul id="filteredDomainsList"></ul>
+            </td>
+        </tr>
+        <tr id="filteredURLSTR">
+            <td colspan="2">
+                Filtered urls: <span style="position:relative;float:right;font-size:xx-small;font-style:italic;">click to delete</span><br />
+                <ul id="filteredURLList"></ul>
+            </td>
+        </tr>
+    </table>
+
+</body>
+</html>

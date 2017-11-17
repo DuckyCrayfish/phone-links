@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Tel Linker Filter</title>
+    <style>
+        body {
+            padding: 10px;
+        }
+        .checkBoxRow td {
+            white-space:nowrap;
+            overflow:hidden;
+        }
+        .spanLabel {
+            font-style: italic;
+            font-size: x-small;
+            width: 200px;
+            word-wrap: break-word;
+            display: block;
+            margin-left: 20px;
+        }
+    </style>
+    <script type="text/javascript" src="browser_action.js"></script>
+</head>
+
+<body>
+    <table align="center" cellspacing="10" style="width:100%">
+        <tr class="checkBoxRow">
+            <td colspan="2" style="border-bottom: 1px solid #000;padding-bottom:10px;">
+                <img src="icon128.png" style="vertical-align:middle;width:15%;" /> <span style="padding-left:5px;font-weight:bold;font-size:medium;">Tel Linker Filtering</span>
+            </td>
+        </tr>
+        <tr class="checkBoxRow">
+            <td>
+                <label><input type="checkbox" id="filterDomain" /> Do not run on this domain</label>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <span class="spanLabel" id="currentDomainLabel"></span>
+            </td>
+        </tr>
+        <tr class="checkBoxRow">
+            <td>
+                <label><input type="checkbox" id="filterURL" /> Do not run on this URL</label>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <span class="spanLabel" id="currentURLLabel"></span>
+            </td>
+        </tr>
+        <tr class="checkBoxRow">
+            <td>
+                <label><input type="checkbox" id="domainReplacement" /> Use custom formats for domain</label>
+            </td>
+        </tr>
+    </table>
+    <div id="domainReplacementRow" style="visibility: hidden;width:100%;">
+        <table style="width:100%;">
+            <tr>
+                <td align="right">
+                    Tel Link Format: <input type="text" id="telLinkFormat" style="border:1px solid #000;font-family:'Courier New';width:60%;" />
+                </td>
+            </tr>
+            <tr>
+                <td align="right">
+                    Link Text Format: <input type="text" id="linkTextFormat" style="border:1px solid #000;font-family:'Courier New';width:60%;" />
+                </td>
+            </tr>
+            <tr>
+                <td align="center">
+                    <button id="saveButton">Save</button>
+                </td>
+            </tr>
+        </table>
+    </div>
+</body>
+</html>
