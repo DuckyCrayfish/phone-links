@@ -1,9 +1,11 @@
 var defaultTelFormat = 'tel:+1-{1}-{2}-{3}';
 
-chrome.contextMenus.create({
-    id: "call",
-    title: "Call Number",
-    contexts: ['selection'],
+chrome.runtime.onInstalled.addListener(function() {
+    chrome.contextMenus.create({
+        id: "call",
+        title: "Call Number",
+        contexts: ['selection'],
+    });
 });
 
 chrome.contextMenus.onClicked.addListener(function (info, tab) {
@@ -15,7 +17,7 @@ chrome.contextMenus.onClicked.addListener(function (info, tab) {
         telLinkFormat: defaultTelFormat
     }, function (settings) {
         if (!phoneNumberRegex.test(selectedText)) {
-            chrome.tabs.update(tab.id, { url: settings.telLinkFormat.substring(0, settings.telLinkFormat.indexOf('{')) + selectedText });
+            chrome.tabs.update(tab.id, { url: settings.telLinkFormat.substring(0, settings.telLinkFormat.indexOf('{')) + encodeURIComponent(selectedText) });
             return;
         }
         var match = phoneNumberPattern.exec(selectedText);
