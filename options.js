@@ -1,4 +1,4 @@
-document.addEventListener("DOMContentLoaded", function (event) {
+document.addEventListener("DOMContentLoaded", function(event) {
     restore_options();
     document.getElementById("saveButton").addEventListener("click", save_options);
 });
@@ -13,11 +13,11 @@ function save_options() {
         telLinkFormat: linkFormatValue,
         linkTextFormat: linkTextFormatValue,
         overrideLinks: overrideValue
-    }, function () {
+    }, function() {
         // Update status to let user know options were saved.
         var status = document.getElementById("status");
         status.textContent = "Options Saved";
-        setTimeout(function () {
+        setTimeout(function() {
             status.innerHTML = "&nbsp;";
         }, 750);
     });
@@ -31,7 +31,7 @@ function restore_options() {
         overrideLinks: true,
         ignoredDomains: [],
         ignoredURLS: []
-    }, function (items) {
+    }, function(items) {
         settings = items;
         document.getElementById("telLinkFormat").value = items.telLinkFormat;
         document.getElementById("linkTextFormat").value = items.linkTextFormat;
@@ -42,12 +42,10 @@ function restore_options() {
     });
 }
 
-function restoreDomains()
-{
+function restoreDomains() {
     if (settings.ignoredDomains.length == 0) {
         document.getElementById("filteredDomainsTR").remove();
-    }
-    else {
+    } else {
         var domainList = document.getElementById("filteredDomainsList");
         for (var i = 0; i < settings.ignoredDomains.length; i++) {
             var item = document.createElement("li");
@@ -63,12 +61,10 @@ function restoreDomains()
     }
 }
 
-function restoreURLS()
-{
+function restoreURLS() {
     if (settings.ignoredURLS.length == 0) {
         document.getElementById("filteredURLSTR").remove();
-    }
-    else {
+    } else {
         var urlList = document.getElementById("filteredURLList");
         for (var i = 0; i < settings.ignoredURLS.length; i++) {
             var item = document.createElement("li");
@@ -84,26 +80,24 @@ function restoreURLS()
     }
 }
 
-function handleDomainRemoval(event)
-{
+function handleDomainRemoval(event) {
     var data = event.target.textContent.substring(1);
     settings.ignoredDomains.splice(settings.ignoredDomains.indexOf(data), 1);
     chrome.storage.local.set({
         ignoredDomains: settings.ignoredDomains
-    }, function () {
+    }, function() {
         event.target.remove();
         if (settings.ignoredDomains.length == 0)
             document.getElementById("filteredDomainsTR").remove();
     });
 }
 
-function handleURLRemoval(event)
-{
+function handleURLRemoval(event) {
     var data = event.target.textContent.substring(1);
     settings.ignoredURLS.splice(settings.ignoredURLS.indexOf(data), 1);
     chrome.storage.local.set({
         ignoredURLS: settings.ignoredURLS
-    }, function () {
+    }, function() {
         event.target.remove();
         if (settings.ignoredURLS.length == 0)
             document.getElementById("filteredURLSTR").remove();

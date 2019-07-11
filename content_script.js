@@ -16,13 +16,13 @@ var settings = null;
 
 //found this on stack overflow; makes it almost feel like we're in good ol' C#
 if (!String.prototype.format) {
-    String.prototype.format = function () {
+    String.prototype.format = function() {
         var args = arguments;
-        return this.replace(/{(\d+)}/g, function (match, number) {
+        return this.replace(/{(\d+)}/g, function(match, number) {
             return typeof args[number] != 'undefined'
-              ? args[number]
-              : match
-            ;
+                ? args[number]
+                : match
+                ;
         });
     };
 }
@@ -36,15 +36,15 @@ chrome.storage.local.get({
     useCustom: [],
     customTel: [],
     customText: []
-}, function (scopedSettings) {
+}, function(scopedSettings) {
     settings = scopedSettings;
     if (onFilterList())
         return;
 
     checkCustomReplacement();
     //DOMNodeInserted is listed as deprecated, so might become unavailable soon, so lets use the newer mutationobserver class
-    var mutationObserver = new MutationObserver(function (mutations) {
-        mutations.forEach(function (mutation) {
+    var mutationObserver = new MutationObserver(function(mutations) {
+        mutations.forEach(function(mutation) {
             if (mutation.type == "childList")
                 for (var i = 0; i < mutation.addedNodes.length; i++)
                     if (mutation.addedNodes[i].className != telLinkerClassName)
@@ -54,13 +54,12 @@ chrome.storage.local.get({
     mutationObserver.observe(document.body, { childList: true, subtree: true });
     //inserting on idle, so the DOM may or may not have already been loaded
     if (document.readyState == "loading")
-        document.addEventListener("DOMContentLoaded", function () { walkTheDOM(document.body, handleNode); });
+        document.addEventListener("DOMContentLoaded", function() { walkTheDOM(document.body, handleNode); });
     else
         walkTheDOM(document.body, handleNode);
 });
 
-function onFilterList()
-{
+function onFilterList() {
     var domain = encodeURI(window.top.location.href.match(domainRegex)[1]);
     var url = encodeURI(window.top.location.href);
     if (settings.ignoredDomains.indexOf(domain) > -1 || settings.ignoredURLS.indexOf(url) > -1)
@@ -68,18 +67,15 @@ function onFilterList()
     return false;
 }
 
-function checkCustomReplacement()
-{
+function checkCustomReplacement() {
     var domain = encodeURI(window.top.location.href.match(domainRegex)[1]);
-    if (settings.useCustom.indexOf(domain) > -1)
-    {
+    if (settings.useCustom.indexOf(domain) > -1) {
         settings.telLinkFormat = settings.customTel[settings.useCustom.indexOf(domain)];
         settings.linkTextFormat = settings.customText[settings.useCustom.indexOf(domain)];
     }
 }
 
-function handleNode(node)
-{
+function handleNode(node) {
     //updated this so that we no longer override things inside of scripts nodes (stupid that these are counted as visible text, but there it is)
     if (node.nodeType != Node.TEXT_NODE || node.parentElement == null || filteredTagNames.indexOf(node.parentElement.tagName) > -1 || (node.parentElement.tagName == "A" && !settings.overrideLinks))
         return;
@@ -92,12 +88,12 @@ function handleNode(node)
     newNode.className = telLinkerClassName;
     var parts = node.data.split(regexSplit);
     var count = 0;
-    parts.forEach(function (part) {
+    parts.forEach(function(part) {
         count++;
         if (count % 2 != 0)
             newNode.appendChild(document.createTextNode(part));
         else {
-            part.replace(regexPhone, function (match, leadingChar, areaCode, threeDigits, fourDigits) {
+            part.replace(regexPhone, function(match, leadingChar, areaCode, threeDigits, fourDigits) {
                 newNode.appendChild(document.createTextNode(leadingChar));
                 match = match.substring(leadingChar.length);
                 var formattedPhoneNumber = settings.telLinkFormat.format(match, areaCode, threeDigits, fourDigits);
@@ -108,7 +104,7 @@ function handleNode(node)
                 link.href = "javascript:void(0);";
                 link.appendChild(document.createTextNode(formattedPhoneText));
                 link.title = "Call: " + formattedPhoneText;
-                link.onclick = function () { DoCall(formattedPhoneNumber); };
+                link.onclick = function() { DoCall(formattedPhoneNumber); };
                 newNode.appendChild(link);
             });
         }
@@ -129,7 +125,6 @@ function walkTheDOM(node, func) {
     }
 }
 
-function DoCall(number)
-{
+function DoCall(number) {
     window.location.href = number;
 }

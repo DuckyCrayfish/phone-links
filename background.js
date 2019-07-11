@@ -8,14 +8,14 @@ chrome.runtime.onInstalled.addListener(function() {
     });
 });
 
-chrome.contextMenus.onClicked.addListener(function (info, tab) {
+chrome.contextMenus.onClicked.addListener(function(info, tab) {
     var phoneNumberPattern = /([\s:]|\d+(?:-|\.)|^)\(?(\d{3})\)?[- \.]?(\d{3})[- \.]?(\d{4})(?=<|\s|$)/g;
     var phoneNumberRegex = new RegExp(phoneNumberPattern);
 
     var selectedText = info.selectionText;
     chrome.storage.local.get({
         telLinkFormat: defaultTelFormat
-    }, function (settings) {
+    }, function(settings) {
         if (!phoneNumberRegex.test(selectedText)) {
             chrome.tabs.update(tab.id, { url: settings.telLinkFormat.substring(0, settings.telLinkFormat.indexOf('{')) + encodeURIComponent(selectedText) });
             return;
@@ -28,13 +28,10 @@ chrome.contextMenus.onClicked.addListener(function (info, tab) {
 });
 
 if (!String.prototype.format) {
-    String.prototype.format = function () {
+    String.prototype.format = function() {
         var args = arguments;
-        return this.replace(/{(\d+)}/g, function (match, number) {
-            return typeof args[number] != 'undefined'
-              ? args[number]
-              : match
-            ;
+        return this.replace(/{(\d+)}/g, function(match, number) {
+            return (typeof args[number] != 'undefined') ? args[number] : match;
         });
     };
 }

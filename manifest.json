@@ -10,8 +10,8 @@
     "tabs"
   ],
   "background": {
-  "persistent": false,
-  "scripts": ["background.js"]
+    "persistent": false,
+    "scripts": ["background.js"]
   },
   "content_scripts": [
     {
@@ -26,12 +26,11 @@
     "default_popup": "browser_action.html"
   },
   "icons": {
-    "16" : "icon16.png",
+    "16": "icon16.png",
     "128": "icon128.png"
   },
-  "options_ui":
-    {
-      "page": "options.html",
-      "chrome_style": true
-    }
+  "options_ui": {
+    "page": "options.html",
+    "chrome_style": true
+  }
 }
