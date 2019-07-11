@@ -104,7 +104,7 @@ function handleNode(node) {
                 link.href = "javascript:void(0);";
                 link.appendChild(document.createTextNode(formattedPhoneText));
                 link.title = "Call: " + formattedPhoneText;
-                link.onclick = function() { DoCall(formattedPhoneNumber); };
+                link.onclick = function() { doCall(formattedPhoneNumber); };
                 newNode.appendChild(link);
             });
         }
@@ -125,6 +125,6 @@ function walkTheDOM(node, func) {
     }
 }
 
-function DoCall(number) {
+function doCall(number) {
     window.location.href = number;
 }

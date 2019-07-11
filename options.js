@@ -1,11 +1,11 @@
 document.addEventListener("DOMContentLoaded", function(event) {
-    restore_options();
-    document.getElementById("saveButton").addEventListener("click", save_options);
+    restoreOptions();
+    document.getElementById("saveButton").addEventListener("click", saveOptions);
 });
 
 var settings = null;
 
-function save_options() {
+function saveOptions() {
     var linkFormatValue = document.getElementById("telLinkFormat").value;
     var linkTextFormatValue = document.getElementById("linkTextFormat").value;
     var overrideValue = document.getElementById("overrideLinks").checked;
@@ -24,7 +24,7 @@ function save_options() {
 }
 
 
-function restore_options() {
+function restoreOptions() {
     chrome.storage.local.get({
         telLinkFormat: "tel:+1-{1}-{2}-{3}",
         linkTextFormat: "{0}",
