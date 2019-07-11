@@ -1,25 +1,24 @@
 {
-"update_url": "https://clients2.google.com/service/update2/crx",
-
+  "update_url": "https://clients2.google.com/service/update2/crx",
   "name": "Tel Linker",
   "version": "0.4.5",
   "manifest_version": 2,
   "description": "Locates telephone numbers on a page and converts them into clickable links.",
   "permissions": [
     "storage",
-	  "contextMenus",
-	  "tabs"
+    "contextMenus",
+    "tabs"
   ],
   "background": {
-	"persistent": false,
-	"scripts": ["background.js"]
+  "persistent": false,
+  "scripts": ["background.js"]
   },
   "content_scripts": [
     {
       "matches": [ "http://*/*", "https://*/*", "file:///*/*" ],
       "js": [ "content_script.js" ],
       "run_at": "document_idle",
-	    "all_frames": true
+      "all_frames": true
     }
   ],
   "browser_action": {
@@ -27,7 +26,7 @@
     "default_popup": "browser_action.html"
   },
   "icons": {
-	  "16" : "icon16.png",
+    "16" : "icon16.png",
     "128": "icon128.png"
   },
   "options_ui":
