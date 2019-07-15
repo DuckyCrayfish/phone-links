@@ -1,14 +1,11 @@
-var regexPatternSplit = /((?:[\s:]|\d+(?:-|\.)|^)\(?\d{3}\)?[- \.]?\d{3}[- \.]?\d{4}(?=<|\s|$))/g;
-var regexPatternPhone = /([\s:]|\d+(?:-|\.)|^)\(?(\d{3})\)?[- \.]?(\d{3})[- \.]?(\d{4})(?=<|\s|$)/g;
-var regexSplit = new RegExp(regexPatternSplit);
-var regexPhone = new RegExp(regexPatternPhone);
+var regexSplit = /((?:[\s:]|\d+(?:-|\.)|^)\(?\d{3}\)?[- \.]?\d{3}[- \.]?\d{4}(?=<|\s|$))/g;
+var regexPhone = /([\s:]|\d+(?:-|\.)|^)\(?(\d{3})\)?[- \.]?(\d{3})[- \.]?(\d{4})(?=<|\s|$)/g;
 
 var defaultTelFormat = 'tel:+1-{1}-{2}-{3}';
 var defaultTextFormat = '{0}';
 var telLinkerClassName = "telLinkerInserted";
 
-var domainPattern = /^[\w-]+:\/*\[?([\w\.:-]+)\]?(?::\d+)?/;
-var domainRegex = new RegExp(domainPattern);
+var domainRegex = /^[\w-]+:\/*\[?([\w\.:-]+)\]?(?::\d+)?/;
 
 var filteredTagNames = ["SCRIPT", "STYLE", "BUTTON", "HEAD", "TITLE", "JSL", "NOSCRIPT"];
 

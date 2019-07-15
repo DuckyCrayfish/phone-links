@@ -9,8 +9,7 @@ chrome.runtime.onInstalled.addListener(function() {
 });
 
 chrome.contextMenus.onClicked.addListener(function(info, tab) {
-    var phoneNumberPattern = /([\s:]|\d+(?:-|\.)|^)\(?(\d{3})\)?[- \.]?(\d{3})[- \.]?(\d{4})(?=<|\s|$)/g;
-    var phoneNumberRegex = new RegExp(phoneNumberPattern);
+    var phoneNumberRegex = /([\s:]|\d+(?:-|\.)|^)\(?(\d{3})\)?[- \.]?(\d{3})[- \.]?(\d{4})(?=<|\s|$)/g;
 
     var selectedText = info.selectionText;
     chrome.storage.local.get({
@@ -20,7 +19,7 @@ chrome.contextMenus.onClicked.addListener(function(info, tab) {
             chrome.tabs.update(tab.id, { url: settings.telLinkFormat.substring(0, settings.telLinkFormat.indexOf('{')) + encodeURIComponent(selectedText) });
             return;
         }
-        var match = phoneNumberPattern.exec(selectedText);
+        var match = phoneNumberRegex.exec(selectedText);
         var formattedPhone = settings.telLinkFormat.format(match[0], match[2], match[3], match[4]);
         chrome.tabs.update(tab.id, { url: formattedPhone });
     });
