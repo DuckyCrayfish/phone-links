@@ -5,7 +5,7 @@ var defaultTelFormat = 'tel:+1-{1}-{2}-{3}';
 var defaultTextFormat = '{0}';
 var telLinkerClassName = "telLinkerInserted";
 
-var domainRegex = /^[\w-]+:\/*\[?([\w\.:-]+)\]?(?::\d+)?/;
+var regexDomain = /^[\w-]+:\/*\[?([\w\.:-]+)\]?(?::\d+)?/;
 
 var filteredTagNames = ["SCRIPT", "STYLE", "BUTTON", "HEAD", "TITLE", "JSL", "NOSCRIPT"];
 
@@ -54,7 +54,7 @@ chrome.storage.local.get({
 });
 
 function onFilterList() {
-    var domain = encodeURI(window.top.location.href.match(domainRegex)[1]);
+    var domain = encodeURI(window.top.location.href.match(regexDomain)[1]);
     var url = encodeURI(window.top.location.href);
     if (settings.ignoredDomains.indexOf(domain) > -1 || settings.ignoredURLS.indexOf(url) > -1)
         return true;
@@ -62,7 +62,7 @@ function onFilterList() {
 }
 
 function checkCustomReplacement() {
-    var domain = encodeURI(window.top.location.href.match(domainRegex)[1]);
+    var domain = encodeURI(window.top.location.href.match(regexDomain)[1]);
     if (settings.useCustom.indexOf(domain) > -1) {
         settings.telLinkFormat = settings.customTel[settings.useCustom.indexOf(domain)];
         settings.linkTextFormat = settings.customText[settings.useCustom.indexOf(domain)];
