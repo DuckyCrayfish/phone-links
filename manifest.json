@@ -1,9 +1,9 @@
 {
   "update_url": "https://clients2.google.com/service/update2/crx",
   "name": "Tel Linker",
-  "version": "0.4.5",
+  "version": "1.0.0",
   "manifest_version": 2,
-  "description": "Locates telephone numbers on a page and converts them into clickable links.",
+  "description": "Enables 'Click to Call' by converting telephone numbers into clickable links.",
   "permissions": [
     "storage",
     "contextMenus",
