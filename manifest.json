@@ -1,6 +1,6 @@
 {
   "update_url": "https://clients2.google.com/service/update2/crx",
-  "name": "Tel Linker",
+  "name": "Click to Call",
   "version": "1.0.0",
   "manifest_version": 2,
   "description": "Enables 'Click to Call' by converting telephone numbers into clickable links.",
@@ -22,7 +22,7 @@
     }
   ],
   "browser_action": {
-    "default_title": "Tel Linker - Page Options",
+    "default_title": "Click to Call - Page Options",
     "default_popup": "browser_action.html",
     "theme_icons": [
       {
