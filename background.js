@@ -1,4 +1,5 @@
 var defaultTelFormat = 'tel:+1-{1}-{2}-{3}';
+var regexPhoneNumber = /([\s:]|\d+(?:-|\.)|^)\(?(\d{3})\)?[- \.]?(\d{3})[- \.]?(\d{4})(?=<|\s|$)/g;
 
 chrome.runtime.onInstalled.addListener(function() {
     chrome.contextMenus.create({
@@ -9,8 +10,6 @@ chrome.runtime.onInstalled.addListener(function() {
 });
 
 chrome.contextMenus.onClicked.addListener(function(info, tab) {
-    var regexPhoneNumber = /([\s:]|\d+(?:-|\.)|^)\(?(\d{3})\)?[- \.]?(\d{3})[- \.]?(\d{4})(?=<|\s|$)/g;
-
     var selectedText = info.selectionText;
     chrome.storage.local.get({
         telLinkFormat: defaultTelFormat
@@ -23,7 +22,6 @@ chrome.contextMenus.onClicked.addListener(function(info, tab) {
         var formattedPhone = settings.telLinkFormat.format(match[0], match[2], match[3], match[4]);
         chrome.tabs.update(tab.id, { url: formattedPhone });
     });
-
 });
 
 if (!String.prototype.format) {
