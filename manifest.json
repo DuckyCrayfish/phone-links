@@ -4,6 +4,9 @@
   "version": "1.0.0",
   "manifest_version": 2,
   "description": "Enables 'Click to Call' by converting telephone numbers into clickable links.",
+  "browser_specific_settings": {
+    "gecko": { "id": "clicktocall@nickiacullo.com" }
+  },
   "permissions": [
     "storage",
     "contextMenus",
