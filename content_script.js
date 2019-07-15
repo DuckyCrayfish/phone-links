@@ -1,14 +1,11 @@
 var regexSplit = /((?:[\s:]|\d+(?:-|\.)|^)\(?\d{3}\)?[- \.]?\d{3}[- \.]?\d{4}(?=<|\s|$))/g;
 var regexPhone = /([\s:]|\d+(?:-|\.)|^)\(?(\d{3})\)?[- \.]?(\d{3})[- \.]?(\d{4})(?=<|\s|$)/g;
+var regexDomain = /^[\w-]+:\/*\[?([\w\.:-]+)\]?(?::\d+)?/;
 
 var defaultTelFormat = 'tel:+1-{1}-{2}-{3}';
 var defaultTextFormat = '{0}';
 var telLinkerClassName = "telLinkerInserted";
-
-var regexDomain = /^[\w-]+:\/*\[?([\w\.:-]+)\]?(?::\d+)?/;
-
 var filteredTagNames = ["SCRIPT", "STYLE", "BUTTON", "HEAD", "TITLE", "JSL", "NOSCRIPT"];
-
 var settings = null;
 
 //found this on stack overflow; makes it almost feel like we're in good ol' C#
