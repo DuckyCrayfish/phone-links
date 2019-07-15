@@ -9,8 +9,8 @@ document.addEventListener('DOMContentLoaded', function() {
         var domain = encodeURI(activeTab.url.match(regexDomain)[1]);
         var url = encodeURI(activeTab.url);
 
-        document.getElementById("currentDomainLabel").innerHTML = domain;
-        document.getElementById("currentURLLabel").innerHTML = activeTab.url;
+        document.getElementById("currentDomainLabel").textContent = domain;
+        document.getElementById("currentURLLabel").textContent = activeTab.url;
 
         chrome.storage.local.get({
             ignoredDomains: [],
