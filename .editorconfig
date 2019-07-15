@@ -11,5 +11,5 @@ charset = utf-8
 indent_size = 4
 
 # JSON files
-[.json]
+[*.json]
 indent_size = 2
