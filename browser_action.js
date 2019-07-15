@@ -1,10 +1,12 @@
+var regexDomain = /^[\w-]+:\/*\[?([\w\.:-]+)\]?(?::\d+)?/;
+
 var defaultTelFormat = 'tel:+1-{1}-{2}-{3}';
 var defaultTextFormat = '{0}';
 
 document.addEventListener('DOMContentLoaded', function() {
     chrome.tabs.query({ active: true, currentWindow: true }, function(arrayOfTabs) {
         var activeTab = arrayOfTabs[0];
-        var domain = encodeURI(activeTab.url.match(/^[\w-]+:\/*\[?([\w\.:-]+)\]?(?::\d+)?/)[1]);
+        var domain = encodeURI(activeTab.url.match(regexDomain)[1]);
         var url = encodeURI(activeTab.url);
 
         document.getElementById("currentDomainLabel").innerHTML = domain;
@@ -32,7 +34,7 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById("saveButton").addEventListener("click", function() {
         chrome.tabs.query({ active: true, currentWindow: true }, function(arrayOfTabs) {
             var activeTab = arrayOfTabs[0];
-            var domain = encodeURI(activeTab.url.match(/^[\w-]+:\/*\[?([\w\.:-]+)\]?(?::\d+)?/)[1]);
+            var domain = encodeURI(activeTab.url.match(regexDomain)[1]);
             chrome.storage.local.get({
                 useCustom: [],
                 customTel: [],
@@ -58,7 +60,7 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById("domainReplacement").addEventListener("change", function() {
         chrome.tabs.query({ active: true, currentWindow: true }, function(arrayOfTabs) {
             var activeTab = arrayOfTabs[0];
-            var domain = encodeURI(activeTab.url.match(/^[\w-]+:\/*\[?([\w\.:-]+)\]?(?::\d+)?/)[1]);
+            var domain = encodeURI(activeTab.url.match(regexDomain)[1]);
             chrome.storage.local.get({
                 useCustom: [],
                 customTel: [],
@@ -98,7 +100,7 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById("filterDomain").addEventListener("change", function() {
         chrome.tabs.query({ active: true, currentWindow: true }, function(arrayOfTabs) {
             var activeTab = arrayOfTabs[0];
-            var domain = encodeURI(activeTab.url.match(/^[\w-]+:\/*\[?([\w\.:-]+)\]?(?::\d+)?/)[1]);
+            var domain = encodeURI(activeTab.url.match(regexDomain)[1]);
             chrome.storage.local.get({
                 ignoredDomains: []
             }, function(settings) {

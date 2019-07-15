@@ -1,6 +1,7 @@
 var regexSplit = /((?:[\s:]|\d+(?:-|\.)|^)\(?\d{3}\)?[- \.]?\d{3}[- \.]?\d{4}(?=<|\s|$))/g;
 var regexPhone = /([\s:]|\d+(?:-|\.)|^)\(?(\d{3})\)?[- \.]?(\d{3})[- \.]?(\d{4})(?=<|\s|$)/g;
 var regexDomain = /^[\w-]+:\/*\[?([\w\.:-]+)\]?(?::\d+)?/;
+var regexFilter = /{(\d+)}/g;
 
 var defaultTelFormat = 'tel:+1-{1}-{2}-{3}';
 var defaultTextFormat = '{0}';
@@ -12,7 +13,7 @@ var settings = null;
 if (!String.prototype.format) {
     String.prototype.format = function() {
         var args = arguments;
-        return this.replace(/{(\d+)}/g, function(match, number) {
+        return this.replace(regexFilter, function(match, number) {
             return typeof args[number] != 'undefined' ? args[number] : match;
         });
     };
