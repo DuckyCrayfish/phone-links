@@ -21,10 +21,10 @@ document.addEventListener('DOMContentLoaded', function() {
         }, function(settings) {
             document.getElementById("filterDomain").checked = settings.ignoredDomains.indexOf(domain) > -1;
             document.getElementById("filterURL").checked = settings.ignoredURLS.indexOf(url) > -1;
-            document.getElementById("domainReplacement").checked = settings.useCustom.indexOf(domain) > -1;
+            document.getElementById("customFormat").checked = settings.useCustom.indexOf(domain) > -1;
             if (settings.useCustom.indexOf(domain) > -1) {
                 var domainIndex = settings.useCustom.indexOf(domain);
-                document.getElementById("domainReplacementRow").style.visibility = "visible";
+                document.getElementById("customFormatRow").style.display = "block";
                 document.getElementById("telLinkFormat").value = settings.customTel[domainIndex];
                 document.getElementById("linkTextFormat").value = settings.customText[domainIndex];
             }
@@ -57,7 +57,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    document.getElementById("domainReplacement").addEventListener("change", function() {
+    document.getElementById("customFormat").addEventListener("change", function() {
         chrome.tabs.query({ active: true, currentWindow: true }, function(arrayOfTabs) {
             var activeTab = arrayOfTabs[0];
             var domain = encodeURI(activeTab.url.match(regexDomain)[1]);
@@ -68,7 +68,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 telLinkFormat: defaultTelFormat,
                 linkTextFormat: defaultTextFormat
             }, function(settings) {
-                var checked = document.getElementById("domainReplacement").checked;
+                var checked = document.getElementById("customFormat").checked;
                 if (checked && settings.useCustom.indexOf(domain) < 0)
                     settings.useCustom.push(domain);
                 else if (!checked && settings.useCustom.indexOf(domain) > -1) {
@@ -76,7 +76,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     settings.customText.splice(settings.useCustom.indexOf(domain), 1);
                     settings.useCustom.splice(settings.useCustom.indexOf(domain), 1);
                 }
-                document.getElementById("domainReplacementRow").style.visibility = settings.useCustom.indexOf(domain) > -1 ? "visible" : "hidden";
+                document.getElementById("customFormatRow").style.display = settings.useCustom.indexOf(domain) > -1 ? "block" : "none";
                 if (settings.useCustom.indexOf(domain) > -1) {
                     var domainIndex = settings.useCustom.indexOf(domain);
                     settings.customTel.splice(domainIndex, 0, settings.telLinkFormat);
