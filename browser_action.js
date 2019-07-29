@@ -62,9 +62,7 @@ saveButton.addEventListener("click", function() {
                 customTel: settings.customTel,
                 customText: settings.customText
             }, function() {
-                chrome.tabs.query({ active: true, currentWindow: true }, function(arrayOfTabs) {
-                    chrome.tabs.reload(arrayOfTabs[0].id);
-                });
+                chrome.tabs.reload(activeTab.id);
             });
         });
     });
@@ -102,9 +100,7 @@ customFormatCheckbox.addEventListener("change", function() {
                 customTel: settings.customTel,
                 customText: settings.customText
             }, function() {
-                chrome.tabs.query({ active: true, currentWindow: true }, function(arrayOfTabs) {
-                    chrome.tabs.reload(arrayOfTabs[0].id);
-                });
+                chrome.tabs.reload(activeTab.id);
             });
         });
     });
@@ -125,9 +121,7 @@ filterDomainCheckbox.addEventListener("change", function() {
             chrome.storage.local.set({
                 ignoredDomains: settings.ignoredDomains
             }, function() {
-                chrome.tabs.query({ active: true, currentWindow: true }, function(arrayOfTabs) {
-                    chrome.tabs.reload(arrayOfTabs[0].id);
-                });
+                chrome.tabs.reload(activeTab.id);
             });
         });
     });
@@ -148,9 +142,7 @@ filterURLCheckbox.addEventListener("change", function() {
             chrome.storage.local.set({
                 ignoredURLS: settings.ignoredURLS
             }, function() {
-                chrome.tabs.query({ active: true, currentWindow: true }, function(arrayOfTabs) {
-                    chrome.tabs.reload(arrayOfTabs[0].id);
-                });
+                chrome.tabs.reload(activeTab.id);
             });
         });
     });
