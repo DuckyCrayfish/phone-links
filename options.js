@@ -1,21 +1,27 @@
-document.addEventListener("DOMContentLoaded", function(event) {
-    restoreOptions();
-    document.getElementById("saveButton").addEventListener("click", saveOptions);
-});
-
 var settings = null;
 
+var saveButton = document.getElementById("saveButton");
+var telLinkFormat = document.getElementById("telLinkFormat");
+var linkTextFormat = document.getElementById("linkTextFormat");
+var overrideLinks = document.getElementById("overrideLinks");
+var status = document.getElementById("status");
+var filteredDomainsList = document.getElementById("filteredDomainsList");
+var filteredDomainsTR = document.getElementById("filteredDomainsTR");
+var filteredUrlList = document.getElementById("filteredURLList");
+var filteredUrlsTR = document.getElementById("filteredURLSTR");
+
+document.addEventListener("DOMContentLoaded", function(event) {
+    restoreOptions();
+    saveButton.addEventListener("click", saveOptions);
+});
+
 function saveOptions() {
-    var linkFormatValue = document.getElementById("telLinkFormat").value;
-    var linkTextFormatValue = document.getElementById("linkTextFormat").value;
-    var overrideValue = document.getElementById("overrideLinks").checked;
     chrome.storage.local.set({
-        telLinkFormat: linkFormatValue,
-        linkTextFormat: linkTextFormatValue,
-        overrideLinks: overrideValue
+        telLinkFormat: telLinkFormat.value,
+        linkTextFormat: linkTextFormat.value,
+        overrideLinks: overrideLinks.value
     }, function() {
         // Update status to let user know options were saved.
-        var status = document.getElementById("status");
         status.textContent = "Options Saved";
         setTimeout(function() {
             status.innerHTML = "&nbsp;";
@@ -33,9 +39,9 @@ function restoreOptions() {
         ignoredURLS: []
     }, function(items) {
         settings = items;
-        document.getElementById("telLinkFormat").value = items.telLinkFormat;
-        document.getElementById("linkTextFormat").value = items.linkTextFormat;
-        document.getElementById("overrideLinks").checked = items.overrideLinks;
+        telLinkFormat.value = items.telLinkFormat;
+        linkTextFormat.value = items.linkTextFormat;
+        overrideLinks.checked = items.overrideLinks;
 
         restoreDomains();
         restoreURLS();
@@ -44,9 +50,8 @@ function restoreOptions() {
 
 function restoreDomains() {
     if (settings.ignoredDomains.length == 0) {
-        document.getElementById("filteredDomainsTR").remove();
+        filteredDomainsTR.remove();
     } else {
-        var domainList = document.getElementById("filteredDomainsList");
         for (var i = 0; i < settings.ignoredDomains.length; i++) {
             var item = document.createElement("li");
             var hideButton = document.createElement("div");
@@ -55,17 +60,17 @@ function restoreDomains() {
             item.title = settings.ignoredDomains[i];
             item.appendChild(hideButton);
             item.appendChild(document.createTextNode(decodeURI(settings.ignoredDomains[i])));
-            domainList.appendChild(item);
+            filteredDomainsList.appendChild(item);
             item.onclick = handleDomainRemoval;
         }
     }
 }
 
+
 function restoreURLS() {
     if (settings.ignoredURLS.length == 0) {
-        document.getElementById("filteredURLSTR").remove();
+        filteredUrlsTR.remove();
     } else {
-        var urlList = document.getElementById("filteredURLList");
         for (var i = 0; i < settings.ignoredURLS.length; i++) {
             var item = document.createElement("li");
             var hideButton = document.createElement("div");
@@ -74,7 +79,7 @@ function restoreURLS() {
             item.title = settings.ignoredURLS[i];
             item.appendChild(hideButton);
             item.appendChild(document.createTextNode(decodeURI(settings.ignoredURLS[i])));
-            urlList.appendChild(item);
+            filteredUrlList.appendChild(item);
             item.onclick = handleURLRemoval;
         }
     }
@@ -88,7 +93,7 @@ function handleDomainRemoval(event) {
     }, function() {
         event.target.remove();
         if (settings.ignoredDomains.length == 0)
-            document.getElementById("filteredDomainsTR").remove();
+            filteredDomainsTR.remove();
     });
 }
 
@@ -100,6 +105,6 @@ function handleURLRemoval(event) {
     }, function() {
         event.target.remove();
         if (settings.ignoredURLS.length == 0)
-            document.getElementById("filteredURLSTR").remove();
+            filteredUrlsTR.remove();
     });
 }
