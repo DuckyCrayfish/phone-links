@@ -71,11 +71,9 @@ function handleNode(node) {
     //updated this so that we no longer override things inside of scripts nodes (stupid that these are counted as visible text, but there it is)
     if (node.nodeType != Node.TEXT_NODE || node.parentElement == null || filteredTagNames.indexOf(node.parentElement.tagName) > -1 || (node.parentElement.tagName == "A" && !settings.overrideLinks))
         return;
+    if (node.parentNode.className == telLinkerClassName) return; //avoid the stack overflow!
+    if (!regexPhone.test(node.data)) return;
 
-    if (node.parentNode.className == telLinkerClassName) //avoid the stack overflow!
-        return;
-    if (!regexPhone.test(node.data))
-        return;
     var newNode = document.createElement("span");
     newNode.className = telLinkerClassName;
     var parts = node.data.split(regexSplit);
