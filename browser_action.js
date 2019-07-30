@@ -61,9 +61,7 @@ saveButton.addEventListener("click", function() {
             chrome.storage.local.set({
                 customTel: settings.customTel,
                 customText: settings.customText
-            }, function() {
-                chrome.tabs.reload(activeTab.id);
-            });
+            }, chrome.tabs.reload);
         });
     });
 });
@@ -99,9 +97,7 @@ customFormatCheckbox.addEventListener("change", function() {
                 useCustom: settings.useCustom,
                 customTel: settings.customTel,
                 customText: settings.customText
-            }, function() {
-                chrome.tabs.reload(activeTab.id);
-            });
+            }, chrome.tabs.reload);
         });
     });
 });
@@ -120,9 +116,7 @@ filterDomainCheckbox.addEventListener("change", function() {
                 settings.ignoredDomains.splice(settings.ignoredDomains.indexOf(domain), 1);
             chrome.storage.local.set({
                 ignoredDomains: settings.ignoredDomains
-            }, function() {
-                chrome.tabs.reload(activeTab.id);
-            });
+            }, chrome.tabs.reload);
         });
     });
 });
@@ -141,9 +135,7 @@ filterURLCheckbox.addEventListener("change", function() {
                 settings.ignoredURLS.splice(settings.ignoredURLS.indexOf(url), 1);
             chrome.storage.local.set({
                 ignoredURLS: settings.ignoredURLS
-            }, function() {
-                chrome.tabs.reload(activeTab.id);
-            });
+            }, chrome.tabs.reload);
         });
     });
 });
