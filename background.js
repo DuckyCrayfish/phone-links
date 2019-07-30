@@ -16,11 +16,11 @@ chrome.contextMenus.onClicked.addListener(function(info, tab) {
     chrome.storage.local.get({
         telLinkFormat: defaultTelFormat
     }, function(settings) {
-        if (!regexPhoneNumber.test(selectedText)) {
+        var match = regexPhoneNumber.exec(selectedText);
+        if (match == null) {
             chrome.tabs.update(tab.id, { url: settings.telLinkFormat.substring(0, settings.telLinkFormat.indexOf('{')) + encodeURIComponent(selectedText) });
             return;
         }
-        var match = regexPhoneNumber.exec(selectedText);
         var formattedPhone = settings.telLinkFormat.format(match[0], match[2], match[3], match[4]);
         chrome.tabs.update(tab.id, { url: formattedPhone });
     });
