@@ -7,7 +7,17 @@ var defaultTelFormat = 'tel:+1-{1}-{2}-{3}';
 var defaultTextFormat = '{0}';
 var telLinkerClassName = "telLinkerInserted";
 var filteredTagNames = ["SCRIPT", "STYLE", "BUTTON", "HEAD", "TITLE", "JSL", "NOSCRIPT"];
-var settings = null;
+
+var settings = {
+    telLinkFormat: defaultTelFormat,
+    linkTextFormat: defaultTextFormat,
+    overrideLinks: true,
+    ignoredDomains: [],
+    ignoredURLS: [],
+    useCustom: [],
+    customTel: [],
+    customText: []
+};
 
 //found this on stack overflow; makes it almost feel like we're in good ol' C#
 if (!String.prototype.format) {
@@ -19,16 +29,7 @@ if (!String.prototype.format) {
     };
 }
 //entry point? load the settings because there isn't a way to do this Synchronously
-chrome.storage.local.get({
-    telLinkFormat: defaultTelFormat,
-    linkTextFormat: defaultTextFormat,
-    overrideLinks: true,
-    ignoredDomains: [],
-    ignoredURLS: [],
-    useCustom: [],
-    customTel: [],
-    customText: []
-}, function(scopedSettings) {
+chrome.storage.local.get(settings, function(scopedSettings) {
     settings = scopedSettings;
     if (onFilterList())
         return;
