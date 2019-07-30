@@ -18,10 +18,21 @@ var filteredDomainsTR = document.getElementById("filteredDomainsTR");
 var filteredUrlList = document.getElementById("filteredURLList");
 var filteredUrlsTR = document.getElementById("filteredURLSTR");
 
-document.addEventListener("DOMContentLoaded", function(event) {
-    restoreOptions();
-    saveButton.addEventListener("click", saveOptions);
-});
+
+saveButton.addEventListener("click", saveOptions);
+restoreOptions();
+
+function restoreOptions() {
+    chrome.storage.local.get(settings, function(items) {
+        settings = items;
+        telLinkFormat.value = items.telLinkFormat;
+        linkTextFormat.value = items.linkTextFormat;
+        overrideLinks.checked = items.overrideLinks;
+
+        restoreDomains();
+        restoreURLS();
+    });
+}
 
 function saveOptions() {
     chrome.storage.local.set({
@@ -34,19 +45,6 @@ function saveOptions() {
         setTimeout(function() {
             status.innerHTML = "&nbsp;";
         }, 750);
-    });
-}
-
-
-function restoreOptions() {
-    chrome.storage.local.get(settings, function(items) {
-        settings = items;
-        telLinkFormat.value = items.telLinkFormat;
-        linkTextFormat.value = items.linkTextFormat;
-        overrideLinks.checked = items.overrideLinks;
-
-        restoreDomains();
-        restoreURLS();
     });
 }
 
@@ -67,7 +65,6 @@ function restoreDomains() {
         }
     }
 }
-
 
 function restoreURLS() {
     if (settings.ignoredURLS.length == 0) {
