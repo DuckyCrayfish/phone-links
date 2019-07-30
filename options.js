@@ -1,4 +1,12 @@
-var settings = null;
+var defaultTelFormat = 'tel:+1-{1}-{2}-{3}';
+var defaultTextFormat = '{0}';
+var settings = {
+    telLinkFormat: defaultTelFormat,
+    linkTextFormat: defaultTextFormat,
+    overrideLinks: true,
+    ignoredDomains: [],
+    ignoredURLS: []
+};
 
 var saveButton = document.getElementById("saveButton");
 var telLinkFormat = document.getElementById("telLinkFormat");
@@ -31,13 +39,7 @@ function saveOptions() {
 
 
 function restoreOptions() {
-    chrome.storage.local.get({
-        telLinkFormat: "tel:+1-{1}-{2}-{3}",
-        linkTextFormat: "{0}",
-        overrideLinks: true,
-        ignoredDomains: [],
-        ignoredURLS: []
-    }, function(items) {
+    chrome.storage.local.get(settings, function(items) {
         settings = items;
         telLinkFormat.value = items.telLinkFormat;
         linkTextFormat.value = items.linkTextFormat;
