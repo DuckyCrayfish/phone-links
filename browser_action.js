@@ -6,22 +6,25 @@ const defaultTextFormat = '{0}';
 const filterDomainCheckbox = document.getElementById('filterDomain');
 const filterURLCheckbox = document.getElementById('filterURL');
 const customFormatCheckbox = document.getElementById('customFormat');
-
 const currentDomainLabel = document.getElementById('currentDomainLabel');
 const currentURLLabel = document.getElementById('currentURLLabel');
-
 const customFormatRow = document.getElementById('customFormatRow');
 const telLinkFormat = document.getElementById('telLinkFormat');
 const linkTextFormat = document.getElementById('linkTextFormat');
-
 const saveButton = document.getElementById('saveButton');
 
 let currentTab;
 
 
+// Entry point
 chrome.tabs.query({ active: true, currentWindow: true }, ([activeTab]) => initializeDOM(activeTab));
 chrome.tabs.onActivated.addListener(activeInfo => chrome.tabs.get(activeInfo.tabId, initializeDOM));
+filterURLCheckbox.addEventListener("change", onUrlCheckboxChanged);
+filterDomainCheckbox.addEventListener("change", onDomainCheckboxChanged);
+customFormatCheckbox.addEventListener("change", onFormatCheckboxChanged);
+saveButton.addEventListener("click", onSaveButtonClicked);
 
+// Initialize the pop-up window with the settings for the current tab
 function initializeDOM(activeTab) {
     currentTab = activeTab;
     const domain = encodeURI(activeTab.url.match(regexDomain)[1]);
@@ -51,27 +54,46 @@ function initializeDOM(activeTab) {
     });
 }
 
-saveButton.addEventListener("click", function() {
+// Runs when the 'url filter' checkbox is checked or unchecked
+function onUrlCheckboxChanged() {
+    const activeTab = currentTab;
+    const url = encodeURI(activeTab.url);
+    chrome.storage.local.get({
+        ignoredURLS: []
+    }, function(settings) {
+        let checked = filterURLCheckbox.checked;
+        let urlIndex = settings.ignoredURLS.indexOf(url);
+        if (checked && urlIndex < 0)
+            settings.ignoredURLS.push(url);
+        else if (!checked && urlIndex > -1)
+            settings.ignoredURLS.splice(urlIndex, 1);
+        chrome.storage.local.set({
+            ignoredURLS: settings.ignoredURLS
+        }, chrome.tabs.reload);
+    });
+}
+
+// Runs when the 'domain filter' checkbox is checked or unchecked
+function onDomainCheckboxChanged() {
     const activeTab = currentTab;
     const domain = encodeURI(activeTab.url.match(regexDomain)[1]);
     chrome.storage.local.get({
-        useCustom: [],
-        customTel: [],
-        customText: []
+        ignoredDomains: []
     }, function(settings) {
-        let customIndex = settings.useCustom.indexOf(domain);
-        if (customIndex > -1) {
-            settings.customTel[customIndex] = telLinkFormat.value;
-            settings.customText[customIndex] = linkTextFormat.value;
-        }
+        let checked = filterDomainCheckbox.checked;
+        let domainIndex = settings.ignoredDomains.indexOf(domain);
+        if (checked && domainIndex < 0)
+            settings.ignoredDomains.push(domain);
+        else if (!checked && domainIndex > -1)
+            settings.ignoredDomains.splice(domainIndex, 1);
         chrome.storage.local.set({
-            customTel: settings.customTel,
-            customText: settings.customText
+            ignoredDomains: settings.ignoredDomains
         }, chrome.tabs.reload);
     });
-});
+}
 
-customFormatCheckbox.addEventListener("change", function() {
+// Runs when the 'custom format' checkbox is checked or unchecked
+function onFormatCheckboxChanged() {
     const activeTab = currentTab;
     const domain = encodeURI(activeTab.url.match(regexDomain)[1]);
     chrome.storage.local.get({
@@ -102,27 +124,10 @@ customFormatCheckbox.addEventListener("change", function() {
             customText: settings.customText
         }, chrome.tabs.reload);
     });
-});
+}
 
-filterDomainCheckbox.addEventListener("change", function() {
-    const activeTab = currentTab;
-    const domain = encodeURI(activeTab.url.match(regexDomain)[1]);
-    chrome.storage.local.get({
-        ignoredDomains: []
-    }, function(settings) {
-        let checked = filterDomainCheckbox.checked;
-        let domainIndex = settings.ignoredDomains.indexOf(domain);
-        if (checked && domainIndex < 0)
-            settings.ignoredDomains.push(domain);
-        else if (!checked && domainIndex > -1)
-            settings.ignoredDomains.splice(domainIndex, 1);
-        chrome.storage.local.set({
-            ignoredDomains: settings.ignoredDomains
-        }, chrome.tabs.reload);
-    });
-});
-
-filterURLCheckbox.addEventListener("change", function() {
+// Runs when the 'custom format' save button is clicked
+function onSaveButtonClicked() {
     const activeTab = currentTab;
     const url = encodeURI(activeTab.url);
     chrome.storage.local.get({
@@ -138,4 +143,4 @@ filterURLCheckbox.addEventListener("change", function() {
             ignoredURLS: settings.ignoredURLS
         }, chrome.tabs.reload);
     });
-});
+}
