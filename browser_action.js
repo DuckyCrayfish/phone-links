@@ -17,8 +17,10 @@ const linkTextFormat = document.getElementById('linkTextFormat');
 const saveButton = document.getElementById('saveButton');
 
 
-chrome.tabs.query({ active: true, currentWindow: true }, function(arrayOfTabs) {
-    const activeTab = arrayOfTabs[0];
+chrome.tabs.query({ active: true, currentWindow: true }, ([activeTab]) => initializeDOM(activeTab));
+chrome.tabs.onActivated.addListener(activeInfo => chrome.tabs.get(activeInfo.tabId, initializeDOM));
+
+function initializeDOM(activeTab) {
     const domain = encodeURI(activeTab.url.match(regexDomain)[1]);
     const url = encodeURI(activeTab.url);
 
@@ -42,7 +44,7 @@ chrome.tabs.query({ active: true, currentWindow: true }, function(arrayOfTabs) {
             linkTextFormat.value = settings.customText[domainIndex];
         }
     });
-});
+}
 
 saveButton.addEventListener("click", function() {
     chrome.tabs.query({ active: true, currentWindow: true }, function(arrayOfTabs) {
