@@ -1,36 +1,32 @@
-var regexPhoneNumber = /([\s:]|\d+(?:-|\.)|^)\(?(\d{3})\)?[- \.]?(\d{3})[- \.]?(\d{4})(?=<|\s|$)/g;
-var regexFilter = /{(\d+)}/g;
+const regexPhoneNumber = /([\s:]|\d+(?:-|\.)|^)\(?(\d{3})\)?[- \.]?(\d{3})[- \.]?(\d{4})(?=<|\s|$)/g;
+const regexFilter = /{(\d+)}/g;
+const defaultTelFormat = 'tel:+1-{1}-{2}-{3}';
 
-var defaultTelFormat = 'tel:+1-{1}-{2}-{3}';
+const contextMenu = {
+    id: "call",
+    title: "Call Number",
+    contexts: ['selection'],
+};
 
-chrome.runtime.onInstalled.addListener(function() {
-    chrome.contextMenus.create({
-        id: "call",
-        title: "Call Number",
-        contexts: ['selection'],
-    });
-});
+
+chrome.runtime.onInstalled.addListener(() => chrome.contextMenus.create(contextMenu));
 
 chrome.contextMenus.onClicked.addListener(function(info, tab) {
-    var selectedText = info.selectionText;
-    chrome.storage.local.get({
-        telLinkFormat: defaultTelFormat
-    }, function(settings) {
-        var match = regexPhoneNumber.exec(selectedText);
+    const selectedText = info.selectionText;
+
+    chrome.storage.local.get({ telLinkFormat: defaultTelFormat }, settings => {
+        let match = regexPhoneNumber.exec(selectedText);
         if (match == null) {
             chrome.tabs.update(tab.id, { url: settings.telLinkFormat.substring(0, settings.telLinkFormat.indexOf('{')) + encodeURIComponent(selectedText) });
             return;
         }
-        var formattedPhone = settings.telLinkFormat.format(match[0], match[2], match[3], match[4]);
+        let formattedPhone = settings.telLinkFormat.format(match[0], match[2], match[3], match[4]);
         chrome.tabs.update(tab.id, { url: formattedPhone });
     });
 });
 
 if (!String.prototype.format) {
     String.prototype.format = function() {
-        var args = arguments;
-        return this.replace(regexFilter, function(match, number) {
-            return (typeof args[number] != 'undefined') ? args[number] : match;
-        });
+        return this.replace(regexFilter, (match, number) => arguments[number] || match);
     };
 }

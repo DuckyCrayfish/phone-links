@@ -1,26 +1,26 @@
-var regexDomain = /^[\w-]+:\/*\[?([\w\.:-]+)\]?(?::\d+)?/;
+const regexDomain = /^[\w-]+:\/*\[?([\w\.:-]+)\]?(?::\d+)?/;
 
-var defaultTelFormat = 'tel:+1-{1}-{2}-{3}';
-var defaultTextFormat = '{0}';
+const defaultTelFormat = 'tel:+1-{1}-{2}-{3}';
+const defaultTextFormat = '{0}';
 
-var filterDomainCheckbox = document.getElementById('filterDomain');
-var filterURLCheckbox = document.getElementById('filterURL');
-var customFormatCheckbox = document.getElementById('customFormat');
+const filterDomainCheckbox = document.getElementById('filterDomain');
+const filterURLCheckbox = document.getElementById('filterURL');
+const customFormatCheckbox = document.getElementById('customFormat');
 
-var currentDomainLabel = document.getElementById('currentDomainLabel');
-var currentURLLabel = document.getElementById('currentURLLabel');
+const currentDomainLabel = document.getElementById('currentDomainLabel');
+const currentURLLabel = document.getElementById('currentURLLabel');
 
-var customFormatRow = document.getElementById('customFormatRow');
-var telLinkFormat = document.getElementById('telLinkFormat');
-var linkTextFormat = document.getElementById('linkTextFormat');
+const customFormatRow = document.getElementById('customFormatRow');
+const telLinkFormat = document.getElementById('telLinkFormat');
+const linkTextFormat = document.getElementById('linkTextFormat');
 
-var saveButton = document.getElementById('saveButton');
+const saveButton = document.getElementById('saveButton');
 
 
 chrome.tabs.query({ active: true, currentWindow: true }, function(arrayOfTabs) {
-    var activeTab = arrayOfTabs[0];
-    var domain = encodeURI(activeTab.url.match(regexDomain)[1]);
-    var url = encodeURI(activeTab.url);
+    const activeTab = arrayOfTabs[0];
+    const domain = encodeURI(activeTab.url.match(regexDomain)[1]);
+    const url = encodeURI(activeTab.url);
 
     currentDomainLabel.textContent = domain;
     currentURLLabel.textContent = activeTab.url;
@@ -36,7 +36,7 @@ chrome.tabs.query({ active: true, currentWindow: true }, function(arrayOfTabs) {
         filterURLCheckbox.checked = settings.ignoredURLS.indexOf(url) > -1;
         customFormatCheckbox.checked = settings.useCustom.indexOf(domain) > -1;
         if (settings.useCustom.indexOf(domain) > -1) {
-            var domainIndex = settings.useCustom.indexOf(domain);
+            let domainIndex = settings.useCustom.indexOf(domain);
             customFormatRow.style.display = "block";
             telLinkFormat.value = settings.customTel[domainIndex];
             linkTextFormat.value = settings.customText[domainIndex];
@@ -46,15 +46,15 @@ chrome.tabs.query({ active: true, currentWindow: true }, function(arrayOfTabs) {
 
 saveButton.addEventListener("click", function() {
     chrome.tabs.query({ active: true, currentWindow: true }, function(arrayOfTabs) {
-        var activeTab = arrayOfTabs[0];
-        var domain = encodeURI(activeTab.url.match(regexDomain)[1]);
+        const activeTab = arrayOfTabs[0];
+        const domain = encodeURI(activeTab.url.match(regexDomain)[1]);
         chrome.storage.local.get({
             useCustom: [],
             customTel: [],
             customText: []
         }, function(settings) {
             if (settings.useCustom.indexOf(domain) > -1) {
-                var domainIndex = settings.useCustom.indexOf(domain);
+                let domainIndex = settings.useCustom.indexOf(domain);
                 settings.customTel[domainIndex] = telLinkFormat.value;
                 settings.customText[domainIndex] = linkTextFormat.value;
             }
@@ -68,8 +68,8 @@ saveButton.addEventListener("click", function() {
 
 customFormatCheckbox.addEventListener("change", function() {
     chrome.tabs.query({ active: true, currentWindow: true }, function(arrayOfTabs) {
-        var activeTab = arrayOfTabs[0];
-        var domain = encodeURI(activeTab.url.match(regexDomain)[1]);
+        const activeTab = arrayOfTabs[0];
+        const domain = encodeURI(activeTab.url.match(regexDomain)[1]);
         chrome.storage.local.get({
             useCustom: [],
             customTel: [],
@@ -77,7 +77,7 @@ customFormatCheckbox.addEventListener("change", function() {
             telLinkFormat: defaultTelFormat,
             linkTextFormat: defaultTextFormat
         }, function(settings) {
-            var checked = customFormatCheckbox.checked;
+            let checked = customFormatCheckbox.checked;
             if (checked && settings.useCustom.indexOf(domain) < 0)
                 settings.useCustom.push(domain);
             else if (!checked && settings.useCustom.indexOf(domain) > -1) {
@@ -87,7 +87,7 @@ customFormatCheckbox.addEventListener("change", function() {
             }
             customFormatRow.style.display = settings.useCustom.indexOf(domain) > -1 ? "block" : "none";
             if (settings.useCustom.indexOf(domain) > -1) {
-                var domainIndex = settings.useCustom.indexOf(domain);
+                let domainIndex = settings.useCustom.indexOf(domain);
                 settings.customTel.splice(domainIndex, 0, settings.telLinkFormat);
                 settings.customText.splice(domainIndex, 0, settings.linkTextFormat);
                 telLinkFormat.value = settings.customTel[domainIndex];
@@ -104,12 +104,12 @@ customFormatCheckbox.addEventListener("change", function() {
 
 filterDomainCheckbox.addEventListener("change", function() {
     chrome.tabs.query({ active: true, currentWindow: true }, function(arrayOfTabs) {
-        var activeTab = arrayOfTabs[0];
-        var domain = encodeURI(activeTab.url.match(regexDomain)[1]);
+        const activeTab = arrayOfTabs[0];
+        const domain = encodeURI(activeTab.url.match(regexDomain)[1]);
         chrome.storage.local.get({
             ignoredDomains: []
         }, function(settings) {
-            var checked = filterDomainCheckbox.checked;
+            let checked = filterDomainCheckbox.checked;
             if (checked && settings.ignoredDomains.indexOf(domain) < 0)
                 settings.ignoredDomains.push(domain);
             else if (!checked && settings.ignoredDomains.indexOf(domain) > -1)
@@ -123,12 +123,12 @@ filterDomainCheckbox.addEventListener("change", function() {
 
 filterURLCheckbox.addEventListener("change", function() {
     chrome.tabs.query({ active: true, currentWindow: true }, function(arrayOfTabs) {
-        var activeTab = arrayOfTabs[0];
-        var url = encodeURI(activeTab.url);
+        const activeTab = arrayOfTabs[0];
+        const url = encodeURI(activeTab.url);
         chrome.storage.local.get({
             ignoredURLS: []
         }, function(settings) {
-            var checked = filterURLCheckbox.checked;
+            let checked = filterURLCheckbox.checked;
             if (checked && settings.ignoredURLS.indexOf(url) < 0)
                 settings.ignoredURLS.push(url);
             else if (!checked && settings.ignoredURLS.indexOf(url) > -1)
