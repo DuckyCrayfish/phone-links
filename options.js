@@ -1,9 +1,10 @@
 const defaultTelFormat = 'tel:+1-{1}-{2}-{3}';
 const defaultTextFormat = '{0}';
+
 let settings = {
     telLinkFormat: defaultTelFormat,
     linkTextFormat: defaultTextFormat,
-    overrideLinks: true,
+    overrideLinks: false,
     ignoredDomains: [],
     ignoredURLS: []
 };
