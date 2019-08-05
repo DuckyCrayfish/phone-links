@@ -1,7 +1,3 @@
-const regexPhoneNumber = /([\s:]|\d+(?:-|\.)|^)\(?(\d{3})\)?[- \.]?(\d{3})[- \.]?(\d{4})(?=<|\s|$)/g;
-const regexFilter = /{(\d+)}/g;
-const defaultTelFormat = 'tel:+1-{1}-{2}-{3}';
-
 const contextMenu = {
     id: "call",
     title: "Call Number",

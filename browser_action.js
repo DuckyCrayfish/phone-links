@@ -1,8 +1,3 @@
-const regexDomain = /^[\w-]+:\/*\[?([\w\.:-]+)\]?(?::\d+)?/;
-
-const defaultTelFormat = 'tel:+1-{1}-{2}-{3}';
-const defaultTextFormat = '{0}';
-
 const filterDomainCheckbox = document.getElementById('filterDomain');
 const filterURLCheckbox = document.getElementById('filterURL');
 const customFormatCheckbox = document.getElementById('customFormat');
