@@ -1,5 +1,5 @@
 const regexSplit = /((?:[\s:]|\d+(?:-|\.)|^)\(?\d{3}\)?[- \.]?\d{3}[- \.]?\d{4}(?=<|\s|$))/g;
-const regexPhone = /([\s:]|\d+(?:-|\.)|^)\(?(\d{3})\)?[- \.]?(\d{3})[- \.]?(\d{4})(?=<|\s|$)/g;
+const regexPhoneNumber = /([\s:]|\d+(?:-|\.)|^)\(?(\d{3})\)?[- \.]?(\d{3})[- \.]?(\d{4})(?=<|\s|$)/g;
 const regexDomain = /^[\w-]+:\/*\[?([\w\.:-]+)\]?(?::\d+)?/;
 const regexFilter = /{(\d+)}/g;
 
@@ -69,7 +69,7 @@ function handleNode(node) {
     if (node.nodeType != Node.TEXT_NODE || node.parentElement == null || filteredTagNames.indexOf(node.parentElement.tagName) > -1 || (node.parentElement.tagName == "A" && !settings.overrideLinks))
         return;
     if (node.parentNode.className == telLinkerClassName) return; //avoid the stack overflow!
-    if (!regexPhone.test(node.data)) return;
+    if (!regexPhoneNumber.test(node.data)) return;
 
     let newNode = document.createElement("span");
     newNode.className = telLinkerClassName;
@@ -80,7 +80,7 @@ function handleNode(node) {
         if (count % 2 != 0)
             newNode.appendChild(document.createTextNode(part));
         else {
-            part.replace(regexPhone, function(match, leadingChar, areaCode, threeDigits, fourDigits) {
+            part.replace(regexPhoneNumber, function(match, leadingChar, areaCode, threeDigits, fourDigits) {
                 newNode.appendChild(document.createTextNode(leadingChar));
                 match = match.substring(leadingChar.length);
                 const formattedPhoneNumber = settings.telLinkFormat.format(match, areaCode, threeDigits, fourDigits);
