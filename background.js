@@ -7,16 +7,14 @@ const contextMenu = {
 
 chrome.runtime.onInstalled.addListener(() => chrome.contextMenus.create(contextMenu));
 
-chrome.contextMenus.onClicked.addListener(function(info, tab) {
-    const selectedText = info.selectionText;
-
+chrome.contextMenus.onClicked.addListener(({ selectionText }, tab) => {
     chrome.storage.local.get({ telLinkFormat: defaultTelFormat }, settings => {
-        let match = regexPhoneNumber.exec(selectedText);
-        if (match == null) {
-            chrome.tabs.update(tab.id, { url: settings.telLinkFormat.substring(0, settings.telLinkFormat.indexOf('{')) + encodeURIComponent(selectedText) });
-            return;
-        }
-        let formattedPhone = settings.telLinkFormat.format(match[0], match[2], match[3], match[4]);
-        chrome.tabs.update(tab.id, { url: formattedPhone });
+        let url;
+        let match = regexPhoneNumber.exec(selectionText);
+        if (match == null)
+            url = settings.telLinkFormat.substring(0, settings.telLinkFormat.indexOf('{')) + encodeURIComponent(selectionText);
+        else
+            url = settings.telLinkFormat.format(match[0], match[2], match[3], match[4]);
+        chrome.tabs.update(tab.id, { url });
     });
 });
