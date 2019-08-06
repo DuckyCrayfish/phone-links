@@ -12,13 +12,6 @@ let settings = {
     customText: []
 };
 
-//found this on stack overflow; makes it almost feel like we're in good ol' C#
-if (!String.prototype.format) {
-    String.prototype.format = function() {
-        return this.replace(regexFilter, (match, number) => arguments[number] || match);
-    };
-}
-
 //entry point? load the settings because there isn't a way to do this Synchronously
 chrome.storage.local.get(settings, function(scopedSettings) {
     settings = scopedSettings;

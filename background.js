@@ -20,9 +20,3 @@ chrome.contextMenus.onClicked.addListener(function(info, tab) {
         chrome.tabs.update(tab.id, { url: formattedPhone });
     });
 });
-
-if (!String.prototype.format) {
-    String.prototype.format = function() {
-        return this.replace(regexFilter, (match, number) => arguments[number] || match);
-    };
-}
