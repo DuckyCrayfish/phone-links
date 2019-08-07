@@ -23,12 +23,11 @@ chrome.storage.local.get(settings, function(scopedSettings) {
     // Observe DOM additions to parse for phone numbers
     const observerOptions = { childList: true, subtree: true };
     const mutationObserver = new MutationObserver(mutations => {
-        mutations.forEach(mutation => {
+        for(let mutation of mutations)
             if (mutation.addedNodes)
-                for (let i = 0; i < mutation.addedNodes.length; i++)
-                    if (mutation.addedNodes[i].className != telLinkerClassName)
-                        walkTheDOM(mutation.addedNodes[i], handleNode);
-        });
+                for (newNode of mutation.addedNodes)
+                    if (newNode.className != telLinkerClassName)
+                        walkTheDOM(newNode, handleNode);
     });
     mutationObserver.observe(document.body, observerOptions);
 });
