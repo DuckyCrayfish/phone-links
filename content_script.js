@@ -29,11 +29,7 @@ chrome.storage.local.get(settings, function(scopedSettings) {
     });
 
     mutationObserver.observe(document.body, { childList: true, subtree: true });
-    //inserting on idle, so the DOM may or may not have already been loaded
-    if (document.readyState == "loading")
-        document.addEventListener("DOMContentLoaded", () => walkTheDOM(document.body, handleNode));
-    else
-        walkTheDOM(document.body, handleNode);
+    walkTheDOM(document.body, handleNode);
 });
 
 function onFilterList() {
