@@ -12,24 +12,25 @@ let settings = {
     customText: []
 };
 
-//entry point? load the settings because there isn't a way to do this Synchronously
+// Entry point. Load settings then parse for changes.
 chrome.storage.local.get(settings, function(scopedSettings) {
     settings = scopedSettings;
     if (onFilterList()) return;
+    getCustomFormat();
 
-    checkCustomReplacement();
-    //DOMNodeInserted is listed as deprecated, so might become unavailable soon, so lets use the newer mutationobserver class
+    walkTheDOM(document.body, handleNode);
+
+    // Observe DOM additions to parse for phone numbers
+    const observerOptions = { childList: true, subtree: true };
     const mutationObserver = new MutationObserver(mutations => {
         mutations.forEach(mutation => {
-            if (mutation.type == "childList")
+            if (mutation.addedNodes)
                 for (let i = 0; i < mutation.addedNodes.length; i++)
                     if (mutation.addedNodes[i].className != telLinkerClassName)
                         walkTheDOM(mutation.addedNodes[i], handleNode);
         });
     });
-
-    mutationObserver.observe(document.body, { childList: true, subtree: true });
-    walkTheDOM(document.body, handleNode);
+    mutationObserver.observe(document.body, observerOptions);
 });
 
 function onFilterList() {
@@ -38,7 +39,7 @@ function onFilterList() {
     return (settings.ignoredDomains.indexOf(domain) > -1 || settings.ignoredURLS.indexOf(url) > -1);
 }
 
-function checkCustomReplacement() {
+function getCustomFormat() {
     const domain = encodeURI(window.top.location.href.match(regexDomain)[1]);
     if (settings.useCustom.indexOf(domain) > -1) {
         settings.telLinkFormat = settings.customTel[settings.useCustom.indexOf(domain)];
