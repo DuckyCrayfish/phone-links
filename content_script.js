@@ -18,26 +18,31 @@ chrome.storage.local.get(settings, function(scopedSettings) {
     if (onFilterList()) return;
     getCustomFormat();
 
-    walkTheDOM(document.body, handleNode);
-
-    // Observe DOM additions to parse for phone numbers
+    // Observe DOM additions to parse for phone numbers.
     const observerOptions = { childList: true, subtree: true };
     const mutationObserver = new MutationObserver(mutations => {
         for(let mutation of mutations)
             if (mutation.addedNodes)
                 for (newNode of mutation.addedNodes)
-                    if (newNode.className != telLinkerClassName)
-                        walkTheDOM(newNode, handleNode);
+                    walkTheDOM(newNode, handleNode);
     });
     mutationObserver.observe(document.body, observerOptions);
+
+    walkTheDOM(document.body, handleNode);
 });
 
+/*
+ * Check if the current page/domain is on the filter list.
+ */
 function onFilterList() {
     const domain = encodeURI(window.top.location.href.match(regexDomain)[1]);
     const url = encodeURI(window.top.location.href);
     return (settings.ignoredDomains.indexOf(domain) > -1 || settings.ignoredURLS.indexOf(url) > -1);
 }
 
+/*
+ * Retrieve the phone number format for this domain.
+ */
 function getCustomFormat() {
     const domain = encodeURI(window.top.location.href.match(regexDomain)[1]);
     if (settings.useCustom.indexOf(domain) > -1) {
@@ -47,41 +52,43 @@ function getCustomFormat() {
 }
 
 function handleNode(node) {
-    //updated this so that we no longer override things inside of scripts nodes (stupid that these are counted as visible text, but there it is)
-    if (node.nodeType != Node.TEXT_NODE || node.parentElement == null || filteredTagNames.indexOf(node.parentElement.tagName) > -1 || (node.parentElement.tagName == "A" && !settings.overrideLinks))
+    // Validate the node.
+    if (node.nodeType != Node.TEXT_NODE
+        || node.parentElement == null // Ignore orphaned leaves.
+        || filteredTagNames.indexOf(node.parentElement.tagName) > -1 // Ignore filtered elements.
+        || (node.parentElement.tagName == "A" && !settings.overrideLinks)
+        || node.parentElement.classList.contains(telLinkerClassName)) // Avoid the stack overflow.
         return;
-    if (node.parentNode.className == telLinkerClassName) return; //avoid the stack overflow!
-    if (!regexPhoneNumber.test(node.data)) return;
 
-    let newNode = document.createElement("span");
-    newNode.className = telLinkerClassName;
-    let parts = node.data.split(regexSplit);
-    let count = 0;
-    parts.forEach(part => {
-        count++;
-        if (count % 2 != 0)
-            newNode.appendChild(document.createTextNode(part));
-        else {
-            part.replace(regexPhoneNumber, function(match, leadingChar, areaCode, threeDigits, fourDigits) {
-                newNode.appendChild(document.createTextNode(leadingChar));
-                match = match.substring(leadingChar.length);
-                const formattedPhoneNumber = settings.telLinkFormat.format(match, areaCode, threeDigits, fourDigits);
-                const formattedPhoneText = settings.linkTextFormat.format(match, areaCode, threeDigits, fourDigits);
+    // Search for a phone number.
+    let match = regexPhoneNumber.exec(node.data);
+    if (match === null) return;
 
-                let link = document.createElement("A");
-                link.className = telLinkerClassName;
-                link.href = "javascript:void(0);";
-                link.appendChild(document.createTextNode(formattedPhoneText));
-                link.title = "Call: " + formattedPhoneText;
-                link.onclick = () => doCall(formattedPhoneNumber);
-                newNode.appendChild(link);
-            });
-        }
-    });
-    if (node.parentElement.tagName != "A")
-        node.parentNode.replaceChild(newNode, node);
-    else
-        node.parentNode.parentNode.replaceChild(newNode, node.parentNode);
+    // Parse a phone number.
+    let [matchedText, leadingChars, areaCode, threeDigit, fourDigit] = match;
+    const formattedPhoneNumber = settings.telLinkFormat.format(matchedText, areaCode, threeDigit, fourDigit);
+    const formattedPhoneText = settings.linkTextFormat.format(matchedText, areaCode, threeDigit, fourDigit);
+
+    // Split text around phone number.
+    let tempNode = node.splitText(match.index);
+    tempNode.splitText(matchedText.length);
+
+    // Replace phone number with link.
+    let link = createLink(formattedPhoneText, formattedPhoneNumber);
+    node.parentNode.replaceChild(link, tempNode);
+}
+
+/*
+ * Creates a link for a phone number.
+ */
+function createLink(text, number) {
+    let link = document.createElement('A');
+    link.className = telLinkerClassName;
+    link.href = "javascript:void(0);";
+    link.title = `Call: ${text}`;
+    link.onclick = () => doCall(number);
+    link.appendChild(document.createTextNode(text));
+    return link;
 }
 
 function walkTheDOM(node, func) {
