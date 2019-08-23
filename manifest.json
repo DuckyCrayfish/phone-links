@@ -1,7 +1,7 @@
 {
   "update_url": "https://clients2.google.com/service/update2/crx",
   "name": "Click to Call",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "manifest_version": 2,
   "description": "Enables 'Click to Call' by converting telephone numbers into clickable links.",
   "browser_specific_settings": {
