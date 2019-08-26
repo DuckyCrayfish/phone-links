@@ -4,7 +4,6 @@ const filteredTagNames = ["SCRIPT", "STYLE", "BUTTON", "HEAD", "TITLE", "JSL", "
 let settings = {
     telLinkFormat: defaultTelFormat,
     linkTextFormat: defaultTextFormat,
-    overrideLinks: true,
     ignoredDomains: [],
     ignoredURLS: [],
     useCustom: [],
@@ -95,9 +94,7 @@ function findTextNodes(node, func) {
     if (node.nodeType === Node.TEXT_NODE) {
         // Text node found. Text nodes can not have children.
         func(node);
-    } else if(!filteredTagNames.includes(node.tagName) // Ignore filtered elements.
-              && (node.tagName !== "A" || settings.overrideLinks)
-              && !node.classList.contains(telLinkerClassName)) { // Avoid the stack overflow.
+    } else if(!filteredTagNames.includes(node.tagName) && !node.classList.contains(telLinkerClassName)) { // Filter elements.
         // Node is not a text node. Recurse through children.
         node = node.firstChild;
         while (node) {

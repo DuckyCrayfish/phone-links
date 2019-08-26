@@ -1,7 +1,6 @@
 let settings = {
     telLinkFormat: defaultTelFormat,
     linkTextFormat: defaultTextFormat,
-    overrideLinks: false,
     ignoredDomains: [],
     ignoredURLS: []
 };
@@ -9,7 +8,6 @@ let settings = {
 const saveButton = document.getElementById("saveButton");
 const telLinkFormat = document.getElementById("telLinkFormat");
 const linkTextFormat = document.getElementById("linkTextFormat");
-const overrideLinks = document.getElementById("overrideLinks");
 const status = document.getElementById("status");
 const filteredDomainsList = document.getElementById("filteredDomainsList");
 const filteredDomainsTR = document.getElementById("filteredDomainsTR");
@@ -25,7 +23,6 @@ function restoreOptions() {
         settings = items;
         telLinkFormat.value = items.telLinkFormat;
         linkTextFormat.value = items.linkTextFormat;
-        overrideLinks.checked = items.overrideLinks;
 
         restoreDomains();
         restoreURLS();
@@ -35,8 +32,7 @@ function restoreOptions() {
 function saveOptions() {
     chrome.storage.local.set({
         telLinkFormat: telLinkFormat.value,
-        linkTextFormat: linkTextFormat.value,
-        overrideLinks: overrideLinks.value
+        linkTextFormat: linkTextFormat.value
     }, () => {
         // Update status to let user know options were saved.
         status.textContent = "Options Saved";
