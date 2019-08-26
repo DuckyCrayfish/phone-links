@@ -86,7 +86,7 @@ function createLink(text, number) {
     link.className = telLinkerClassName;
     link.href = "javascript:void(0);";
     link.title = `Call: ${text}`;
-    link.onclick = () => doCall(number);
+    link.onclick = () => call(number);
     link.appendChild(document.createTextNode(text));
     return link;
 }
@@ -101,6 +101,6 @@ function walkTheDOM(node, func) {
     }
 }
 
-function doCall(number) {
+function call(number) {
     window.location.href = number;
 }
