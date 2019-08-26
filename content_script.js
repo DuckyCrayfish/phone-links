@@ -1,4 +1,4 @@
-const telLinkerClassName = "telLinkerInserted";
+const phoneLinkClassName = "phone-link-inserted";
 const filteredTagNames = ["SCRIPT", "STYLE", "BUTTON", "HEAD", "TITLE", "JSL", "NOSCRIPT"];
 
 let settings = {
@@ -77,7 +77,7 @@ function parseTextNode(node) {
  */
 function createLink(text, number) {
     let link = document.createElement('A');
-    link.className = telLinkerClassName;
+    link.className = phoneLinkClassName;
     link.href = "javascript:void(0);";
     link.title = `Call: ${text}`;
     link.onclick = () => call(number);
@@ -94,7 +94,7 @@ function findTextNodes(node, func) {
     if (node.nodeType === Node.TEXT_NODE) {
         // Text node found. Text nodes can not have children.
         func(node);
-    } else if(!filteredTagNames.includes(node.tagName) && !node.classList.contains(telLinkerClassName)) { // Filter elements.
+    } else if(!filteredTagNames.includes(node.tagName) && !node.classList.contains(phoneLinkClassName)) { // Filter elements.
         // Node is not a text node. Recurse through children.
         node = node.firstChild;
         while (node) {
