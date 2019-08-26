@@ -12,8 +12,11 @@ let currentTab;
 
 
 // Entry point
+// Get active tab and initialize the popup DOM.
 chrome.tabs.query({ active: true, currentWindow: true }, ([activeTab]) => initializeDOM(activeTab));
+// Listen for tab switches to update the popup DOM.
 chrome.tabs.onActivated.addListener(activeInfo => chrome.tabs.get(activeInfo.tabId, initializeDOM));
+// Add popup settings DOM event listeners.
 filterURLCheckbox.addEventListener("change", onUrlCheckboxChanged);
 filterDomainCheckbox.addEventListener("change", onDomainCheckboxChanged);
 customFormatCheckbox.addEventListener("change", onFormatCheckboxChanged);
@@ -38,8 +41,10 @@ function initializeDOM(activeTab) {
         customTel: [],
         customText: []
     }, function(settings) {
-        filterURLCheckbox.checked = settings.ignoredURLS.indexOf(url) > -1;
-        filterDomainCheckbox.checked = settings.ignoredDomains.indexOf(domain) > -1;
+        filterURLCheckbox.checked = settings.ignoredURLS.includes(url);
+        filterDomainCheckbox.checked = settings.ignoredDomains.includes(domain);
+
+        // Update custom format elements.
         let customIndex = settings.useCustom.indexOf(domain);
         customFormatCheckbox.checked = customIndex > -1;
         if (customIndex > -1) {
