@@ -24,11 +24,11 @@ chrome.storage.local.get(settings, function(scopedSettings) {
         for(let mutation of mutations)
             if (mutation.addedNodes)
                 for (newNode of mutation.addedNodes)
-                    walkTheDOM(newNode, handleNode);
+                    findTextNodes(newNode, parseTextNode);
     });
     mutationObserver.observe(document.body, observerOptions);
 
-    walkTheDOM(document.body, handleNode);
+    findTextNodes(document.body, parseTextNode);
 });
 
 /*
@@ -51,14 +51,9 @@ function getCustomFormat() {
     }
 }
 
-function handleNode(node) {
-    // Validate the node.
-    if (node.nodeType != Node.TEXT_NODE
-        || node.parentElement == null // Ignore orphaned leaves.
-        || filteredTagNames.indexOf(node.parentElement.tagName) > -1 // Ignore filtered elements.
-        || (node.parentElement.tagName == "A" && !settings.overrideLinks)
-        || node.parentElement.classList.contains(telLinkerClassName)) // Avoid the stack overflow.
-        return;
+function parseTextNode(node) {
+    // Only accept text nodes.
+    if (node.nodeType !== Node.TEXT_NODE) return;
 
     // Search for a phone number.
     let match = regexPhoneNumber.exec(node.data);
@@ -91,16 +86,29 @@ function createLink(text, number) {
     return link;
 }
 
-function walkTheDOM(node, func) {
-    func(node);
-    node = node.firstChild;
-    while (node) {
-        let nextNode = node.nextSibling;
-        walkTheDOM(node, func);
-        node = nextNode;
+/*
+ * Recurses through all children of node, ignoring filtered elements, and runs func on any text nodes found.
+ */
+function findTextNodes(node, func) {
+    if (node.parentElement == null) return; // Ignore orphaned nodes.
+
+    if (node.nodeType === Node.TEXT_NODE) {
+        // Text node found. Text nodes can not have children.
+        func(node);
+    } else if(!filteredTagNames.includes(node.tagName) // Ignore filtered elements.
+              && (node.tagName !== "A" || settings.overrideLinks)
+              && !node.classList.contains(telLinkerClassName)) { // Avoid the stack overflow.
+        // Node is not a text node. Recurse through children.
+        node = node.firstChild;
+        while (node) {
+            let nextNode = node.nextSibling;
+            findTextNodes(node, func);
+            node = nextNode;
+        }
     }
 }
 
+// Place a call.
 function call(number) {
     window.location.href = number;
 }
