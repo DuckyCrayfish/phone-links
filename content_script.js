@@ -36,7 +36,7 @@ chrome.storage.local.get(settings, function(scopedSettings) {
 function onFilterList() {
     const domain = encodeURI(window.top.location.href.match(regexDomain)[1]);
     const url = encodeURI(window.top.location.href);
-    return (settings.ignoredDomains.indexOf(domain) > -1 || settings.ignoredURLS.indexOf(url) > -1);
+    return (settings.ignoredDomains.includes(domain) || settings.ignoredURLS.includes(url));
 }
 
 /**
@@ -44,9 +44,10 @@ function onFilterList() {
  */
 function getCustomFormat() {
     const domain = encodeURI(window.top.location.href.match(regexDomain)[1]);
-    if (settings.useCustom.indexOf(domain) > -1) {
-        settings.telLinkFormat = settings.customTel[settings.useCustom.indexOf(domain)];
-        settings.linkTextFormat = settings.customText[settings.useCustom.indexOf(domain)];
+    const domainIndex = settings.useCustom.indexOf(domain);
+    if (domainIndex > -1) {
+        settings.telLinkFormat = settings.customTel[domainIndex];
+        settings.linkTextFormat = settings.customText[domainIndex];
     }
 }
 
