@@ -103,8 +103,8 @@ function findTextNodes(node, func) {
     if (node.nodeType === Node.TEXT_NODE) {
         // Text node found. Text nodes can not have children.
         func(node);
-    } else if(!filteredTagNames.includes(node.tagName) && !node.classList.contains(phoneLinkClassName)) { // Filter elements.
-        // Node is not a text node. Recurse through children.
+    } else if(node.nodeType === node.ELEMENT_NODE && !filteredTagNames.includes(node.tagName) && !node.classList.contains(phoneLinkClassName)) { // Filter elements.
+        // Node is an element. Recurse through children.
         node = node.firstChild;
         while (node) {
             let nextNode = node.nextSibling;
