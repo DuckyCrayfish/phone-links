@@ -22,7 +22,7 @@ chrome.storage.local.get(settings, function(scopedSettings) {
     const mutationObserver = new MutationObserver(mutations => {
         for(let mutation of mutations)
             if (mutation.addedNodes)
-                for (newNode of mutation.addedNodes)
+                for (let newNode of mutation.addedNodes)
                     findTextNodes(newNode, parseTextNode);
     });
     mutationObserver.observe(document.body, observerOptions);
