@@ -5,8 +5,10 @@ const contextMenu = {
 };
 
 
+// Create the context menu item.
 chrome.runtime.onInstalled.addListener(() => chrome.contextMenus.create(contextMenu));
 
+// Context menu click listener.
 chrome.contextMenus.onClicked.addListener(({ selectionText }, tab) => {
     chrome.storage.local.get({ telLinkFormat: defaultTelFormat }, settings => {
         let url;

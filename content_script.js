@@ -30,7 +30,7 @@ chrome.storage.local.get(settings, function(scopedSettings) {
     findTextNodes(document.body, parseTextNode);
 });
 
-/*
+/**
  * Check if the current page/domain is on the filter list.
  */
 function onFilterList() {
@@ -39,7 +39,7 @@ function onFilterList() {
     return (settings.ignoredDomains.indexOf(domain) > -1 || settings.ignoredURLS.indexOf(url) > -1);
 }
 
-/*
+/**
  * Retrieve the phone number format for this domain.
  */
 function getCustomFormat() {
@@ -50,6 +50,10 @@ function getCustomFormat() {
     }
 }
 
+/**
+ * Finds a phone number in the text node and substitutes it with a link.
+ * @param {Node} node A text node to parse.
+ */
 function parseTextNode(node) {
     // Only accept text nodes.
     if (node.nodeType !== Node.TEXT_NODE) return;
@@ -72,8 +76,10 @@ function parseTextNode(node) {
     node.parentNode.replaceChild(link, tempNode);
 }
 
-/*
+/**
  * Creates a link for a phone number.
+ * @param {string} text The link's inner text to display. Also shown in the tool-tip title.
+ * @param {string} number The URL of the phone number to link to.
  */
 function createLink(text, number) {
     let link = document.createElement('A');
@@ -85,8 +91,10 @@ function createLink(text, number) {
     return link;
 }
 
-/*
- * Recurses through all children of node, ignoring filtered elements, and runs func on any text nodes found.
+/**
+ * Recurses through all children of node, ignoring filtered elements, and calls func on any text nodes found.
+ * @param {Node} node The root node to traverse through.
+ * @param { function(Node) } func A function to be called on each text node found.
  */
 function findTextNodes(node, func) {
     if (node.parentElement == null) return; // Ignore orphaned nodes.

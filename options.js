@@ -15,9 +15,13 @@ const filteredUrlList = document.getElementById("filteredURLList");
 const filteredUrlsTR = document.getElementById("filteredURLSTR");
 
 
+// Entry point.
 saveButton.addEventListener("click", saveOptions);
 restoreOptions();
 
+/**
+ * Retrieve settings and apply them to DOM elements.
+ */
 function restoreOptions() {
     chrome.storage.local.get(settings, items => {
         settings = items;
@@ -29,6 +33,9 @@ function restoreOptions() {
     });
 }
 
+/**
+ * Save all options, display feedback message.
+ */
 function saveOptions() {
     chrome.storage.local.set({
         telLinkFormat: telLinkFormat.value,
@@ -40,6 +47,9 @@ function saveOptions() {
     });
 }
 
+/**
+ * Update domain filter list DOM to represent settings.
+ */
 function restoreDomains() {
     if (settings.ignoredDomains.length == 0) {
         filteredDomainsTR.remove();
@@ -58,6 +68,9 @@ function restoreDomains() {
     }
 }
 
+/**
+ * Update URL filter list DOM to represent settings.
+ */
 function restoreURLS() {
     if (settings.ignoredURLS.length == 0) {
         filteredUrlsTR.remove();
@@ -76,6 +89,9 @@ function restoreURLS() {
     }
 }
 
+/*
+ * Click listener for domain filter listing. Deletes on click.
+ */
 function handleDomainRemoval(event) {
     let data = event.target.textContent.substring(1);
     settings.ignoredDomains.splice(settings.ignoredDomains.indexOf(data), 1);
@@ -88,6 +104,9 @@ function handleDomainRemoval(event) {
     });
 }
 
+/*
+ * Click listener for URL filter listing. Deletes on click.
+ */
 function handleURLRemoval(event) {
     let data = event.target.textContent.substring(1);
     settings.ignoredURLS.splice(settings.ignoredURLS.indexOf(data), 1);

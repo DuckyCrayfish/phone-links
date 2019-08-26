@@ -19,7 +19,10 @@ filterDomainCheckbox.addEventListener("change", onDomainCheckboxChanged);
 customFormatCheckbox.addEventListener("change", onFormatCheckboxChanged);
 saveButton.addEventListener("click", onSaveButtonClicked);
 
-// Initialize the pop-up window with the settings for the current tab
+/**
+ * Initialize the pop-up window with the settings for the tab activeTab.
+ * @param {Object} activeTab The tab to update the pop-up settings for.
+ */
 function initializeDOM(activeTab) {
     currentTab = activeTab;
     const domain = encodeURI(activeTab.url.match(regexDomain)[1]);
@@ -49,7 +52,10 @@ function initializeDOM(activeTab) {
     });
 }
 
-// Runs when the 'url filter' checkbox is checked or unchecked
+/**
+ * Update the URL settings based on the popup checkbox.
+ * Runs when the 'URL filter' checkbox is changed.
+ */
 function onUrlCheckboxChanged() {
     const activeTab = currentTab;
     const url = encodeURI(activeTab.url);
@@ -68,7 +74,10 @@ function onUrlCheckboxChanged() {
     });
 }
 
-// Runs when the 'domain filter' checkbox is checked or unchecked
+/**
+ * Update the domain settings based on the popup checkbox.
+ * Runs when the 'domain filter' checkbox is changed.
+ */
 function onDomainCheckboxChanged() {
     const activeTab = currentTab;
     const domain = encodeURI(activeTab.url.match(regexDomain)[1]);
@@ -87,7 +96,10 @@ function onDomainCheckboxChanged() {
     });
 }
 
-// Runs when the 'custom format' checkbox is checked or unchecked
+/**
+ * Update the domain custom format settings based on the popup.
+ * Runs when the 'custom format' checkbox is changed.
+ */
 function onFormatCheckboxChanged() {
     const activeTab = currentTab;
     const domain = encodeURI(activeTab.url.match(regexDomain)[1]);
@@ -121,7 +133,10 @@ function onFormatCheckboxChanged() {
     });
 }
 
-// Runs when the 'custom format' save button is clicked
+/**
+ * Update the domain custom format settings based on the popup.
+ * Runs when the 'custom format' save button is pressed.
+ */
 function onSaveButtonClicked() {
     const activeTab = currentTab;
     const url = encodeURI(activeTab.url);
