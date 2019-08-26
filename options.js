@@ -54,16 +54,17 @@ function restoreDomains() {
     if (settings.ignoredDomains.length == 0) {
         filteredDomainsTR.remove();
     } else {
-        for (let i = 0; i < settings.ignoredDomains.length; i++) {
-            let hideButton = document.createElement("div");
-            hideButton.className = "hide-button";
-            hideButton.appendChild(document.createTextNode("X"));
-            let item = document.createElement("li");
-            item.title = settings.ignoredDomains[i];
-            item.appendChild(hideButton);
-            item.appendChild(document.createTextNode(decodeURI(settings.ignoredDomains[i])));
-            filteredDomainsList.appendChild(item);
-            item.onclick = handleDomainRemoval;
+        for (const domain of settings.ignoredDomains) {
+            // Create a list item for each filtered domain.
+            const removeButton = document.createElement("div");
+            removeButton.className = "hide-button";
+            removeButton.appendChild(document.createTextNode("X"));
+            const listItem = document.createElement("li");
+            listItem.title = domain;
+            listItem.appendChild(removeButton);
+            listItem.appendChild(document.createTextNode(decodeURI(domain)));
+            filteredDomainsList.appendChild(listItem);
+            listItem.onclick = handleDomainRemoval;
         }
     }
 }
@@ -75,16 +76,17 @@ function restoreURLS() {
     if (settings.ignoredURLS.length == 0) {
         filteredUrlsTR.remove();
     } else {
-        for (let i = 0; i < settings.ignoredURLS.length; i++) {
-            let hideButton = document.createElement("div");
-            hideButton.className = "hide-button";
-            hideButton.appendChild(document.createTextNode("X"));
-            let item = document.createElement("li");
-            item.title = settings.ignoredURLS[i];
-            item.appendChild(hideButton);
-            item.appendChild(document.createTextNode(decodeURI(settings.ignoredURLS[i])));
-            filteredUrlList.appendChild(item);
-            item.onclick = handleURLRemoval;
+        for (const url of settings.ignoredURLS) {
+            // Create a list item for each filtered URL.
+            const removeButton = document.createElement("div");
+            removeButton.className = "hide-button";
+            removeButton.appendChild(document.createTextNode("X"));
+            const listItem = document.createElement("li");
+            listItem.title = url;
+            listItem.appendChild(removeButton);
+            listItem.appendChild(document.createTextNode(decodeURI(url)));
+            filteredUrlList.appendChild(listItem);
+            listItem.onclick = handleURLRemoval;
         }
     }
 }
