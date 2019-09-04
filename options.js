@@ -9,10 +9,10 @@ const saveButton = document.getElementById("saveButton");
 const telLinkFormat = document.getElementById("telLinkFormat");
 const linkTextFormat = document.getElementById("linkTextFormat");
 const status = document.getElementById("status");
-const filteredDomainsList = document.getElementById("filteredDomainsList");
-const filteredDomainsTR = document.getElementById("filteredDomainsTR");
+const filteredDomainList = document.getElementById("filteredDomainList");
+const filteredDomainSection = document.getElementById("filteredDomainSection");
 const filteredUrlList = document.getElementById("filteredURLList");
-const filteredUrlsTR = document.getElementById("filteredURLSTR");
+const filteredUrlSection = document.getElementById("filteredUrlSection");
 
 
 // Entry point.
@@ -52,18 +52,14 @@ function saveOptions() {
  */
 function restoreDomains() {
     if (settings.ignoredDomains.length == 0) {
-        filteredDomainsTR.remove();
+        filteredDomainSection.classList.add('hidden');
     } else {
         for (const domain of settings.ignoredDomains) {
             // Create a list item for each filtered domain.
-            const removeButton = document.createElement("div");
-            removeButton.className = "hide-button";
-            removeButton.appendChild(document.createTextNode("X"));
             const listItem = document.createElement("li");
             listItem.title = domain;
-            listItem.appendChild(removeButton);
             listItem.appendChild(document.createTextNode(decodeURI(domain)));
-            filteredDomainsList.appendChild(listItem);
+            filteredDomainList.appendChild(listItem);
             listItem.onclick = handleDomainRemoval;
         }
     }
@@ -74,16 +70,12 @@ function restoreDomains() {
  */
 function restoreURLS() {
     if (settings.ignoredURLS.length == 0) {
-        filteredUrlsTR.remove();
+        filteredUrlSection.classList.add('hidden');
     } else {
         for (const url of settings.ignoredURLS) {
             // Create a list item for each filtered URL.
-            const removeButton = document.createElement("div");
-            removeButton.className = "hide-button";
-            removeButton.appendChild(document.createTextNode("X"));
             const listItem = document.createElement("li");
             listItem.title = url;
-            listItem.appendChild(removeButton);
             listItem.appendChild(document.createTextNode(decodeURI(url)));
             filteredUrlList.appendChild(listItem);
             listItem.onclick = handleURLRemoval;
@@ -102,7 +94,7 @@ function handleDomainRemoval(event) {
     }, () => {
         event.target.remove();
         if (settings.ignoredDomains.length == 0)
-            filteredDomainsTR.remove();
+            filteredDomainSection.classList.add('hidden');
     });
 }
 
@@ -117,6 +109,6 @@ function handleURLRemoval(event) {
     }, () => {
         event.target.remove();
         if (settings.ignoredURLS.length == 0)
-            filteredUrlsTR.remove();
+            filteredUrlSection.classList.add('hidden');
     });
 }
