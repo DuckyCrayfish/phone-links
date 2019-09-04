@@ -9,6 +9,7 @@ const saveButton = document.getElementById("saveButton");
 const telLinkFormat = document.getElementById("telLinkFormat");
 const linkTextFormat = document.getElementById("linkTextFormat");
 const status = document.getElementById("status");
+const filtersSection = document.getElementById("filtersSection");
 const filteredDomainList = document.getElementById("filteredDomainList");
 const filteredDomainSection = document.getElementById("filteredDomainSection");
 const filteredUrlList = document.getElementById("filteredURLList");
@@ -28,8 +29,12 @@ function restoreOptions() {
         telLinkFormat.value = items.telLinkFormat;
         linkTextFormat.value = items.linkTextFormat;
 
-        restoreDomains();
-        restoreURLS();
+        if (settings.ignoredDomains.length == 0 && settings.ignoredURLS.length == 0) {
+            filtersSection.classList.add('hidden');
+        } else {
+            restoreDomains();
+            restoreURLS();
+        }
     });
 }
 
