@@ -1,4 +1,4 @@
-const regexPhoneNumber = /(?:^|[^\w\d])(\+?(?:001|1)[- \.]?)?\(?(\d{3})\)?[- \.]?(\d{3})[- \.]?(\d{4})(?![\w\d])/;
+const regexPhoneNumber = /(^|[^\w\d\+])(\+?(?:001|1)[- \.]?)?\(?(\d{3})\)?[- \.]?(\d{3})[- \.]?(\d{4})(?![\w\d])/;
 const regexDomain = /^[\w-]+:\/*\[?([\w\.:-]+)\]?(?::\d+)?/;
 const regexFilter = /{(\d+)}/g;
 const defaultTelFormat = 'tel:+1-{1}-{2}-{3}';

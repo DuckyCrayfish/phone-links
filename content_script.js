@@ -64,12 +64,13 @@ function parseTextNode(node) {
     if (match === null) return;
 
     // Parse a phone number.
-    let [matchedText, leadingChars, areaCode, threeDigit, fourDigit] = match;
+    let [matchedText, prefix, leadingChars, areaCode, threeDigit, fourDigit] = match;
+    matchedText = matchedText.substr(prefix.length); // Remove prefix (This is a work around for JavaScripts lack of look-behind support).
     const formattedPhoneNumber = settings.telLinkFormat.format(matchedText, areaCode, threeDigit, fourDigit);
     const formattedPhoneText = settings.linkTextFormat.format(matchedText, areaCode, threeDigit, fourDigit);
 
     // Split text around phone number.
-    let tempNode = node.splitText(match.index);
+    let tempNode = node.splitText(match.index + prefix.length);
     tempNode.splitText(matchedText.length);
 
     // Replace phone number with link.
