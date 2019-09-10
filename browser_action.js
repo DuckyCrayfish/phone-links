@@ -7,6 +7,7 @@ const customFormatRow = document.getElementById('customFormatRow');
 const telLinkFormat = document.getElementById('telLinkFormat');
 const linkTextFormat = document.getElementById('linkTextFormat');
 const saveButton = document.getElementById('saveButton');
+const settingsButton = document.getElementById('settings-button');
 
 let currentTab;
 
@@ -21,6 +22,7 @@ filterURLCheckbox.addEventListener("change", onUrlCheckboxChanged);
 filterDomainCheckbox.addEventListener("change", onDomainCheckboxChanged);
 customFormatCheckbox.addEventListener("change", onFormatCheckboxChanged);
 saveButton.addEventListener("click", onSaveButtonClicked);
+settingsButton.addEventListener("click", () => chrome.runtime.openOptionsPage());
 
 /**
  * Initialize the pop-up window with the settings for the tab activeTab.
